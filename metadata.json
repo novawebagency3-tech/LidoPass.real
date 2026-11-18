@@ -1,0 +1,8 @@
+{
+  "name": "LidoPass",
+  "description": "Progressive Web App della Costa Adriatica per disponibilità in tempo reale, formule, campi sportivi ed eventi di stabilimenti balneari e locali.",
+  "requestFramePermissions": [],
+  "majorCapabilities": [
+    "MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"
+  ]
+}

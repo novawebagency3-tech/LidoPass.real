@@ -1,0 +1,3304 @@
+<!doctype html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob: https://qrserver.com https://api.qrserver.com https:; connect-src 'self' https://jsonbin.io https://api.jsonbin.io https://qrserver.com https://api.qrserver.com; manifest-src 'self' data: blob:; font-src 'self' data:;" />
+
+  <title>LidoPass — Coastal Booking &amp; Live Availability Network</title>
+  <meta name="description" content="Piattaforma digitale della Costa Adriatica per disponibilità in tempo reale, formule contrattuali, impianti sportivi ed eventi di stabilimenti balneari e beach club." />
+  <meta property="og:title" content="LidoPass — Coastal Booking & Live Availability Network" />
+  <meta property="og:description" content="Disponibilità live, formule stagionali o giornaliere, campi sportivi ed eventi degli stabilimenti della Costa Adriatica." />
+  <meta property="og:type" content="website" />
+  <meta name="twitter:card" content="summary_large_image" />
+
+  <meta name="theme-color" content="#0284C7" />
+  <meta name="mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="default" />
+  <meta name="apple-mobile-web-app-title" content="LidoPass" />
+  <link id="favicon-svg" rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='16' fill='%230B132B'/%3E%3Cpath d='M12 36c6-6 14-6 20 0s14 6 20 0' stroke='%230EA5E9' stroke-width='4' stroke-linecap='round' fill='none'/%3E%3Cpath d='M12 45c6-5 14-5 20 0s14 5 20 0' stroke='%23C59B27' stroke-width='3.5' stroke-linecap='round' fill='none'/%3E%3Ccircle cx='44' cy='21' r='5' stroke='%23C59B27' stroke-width='3' fill='none'/%3E%3C/svg%3E" />
+  <link id="apple-touch-icon" rel="apple-touch-icon" href="" />
+  <link id="pwa-manifest" rel="manifest" href="" />
+
+  <style>
+    :root {
+      --bg: #F6F8FB;
+      --glass: rgba(255, 255, 255, 0.86);
+      --glass-strong: rgba(255, 255, 255, 0.94);
+      --surface-subtle: rgba(241, 245, 249, 0.72);
+      --night: #0B132B;
+      --slate: #475569;
+      --muted: #64748B;
+      --ocean: #0284C7;
+      --ocean-bright: #0EA5E9;
+      --ocean-dark: #0369A1;
+      --ocean-tint: rgba(2, 132, 199, 0.09);
+      --gold: #C59B27;
+      --gold-amber: #D97706;
+      --gold-tint: rgba(197, 155, 39, 0.12);
+      --gold-ink: #854D0E;
+      --green: #16A34A;
+      --green-ink: #14532D;
+      --green-tint: rgba(22, 163, 74, 0.1);
+      --amber: #D97706;
+      --amber-ink: #78350F;
+      --amber-tint: rgba(217, 119, 6, 0.11);
+      --red: #DC2626;
+      --red-ink: #7F1D1D;
+      --red-tint: rgba(220, 38, 38, 0.1);
+      --border: rgba(15, 23, 42, 0.08);
+      --border-strong: rgba(15, 23, 42, 0.14);
+      --shadow-card: 0 1px 2px rgba(11, 19, 43, 0.04), 0 8px 24px -6px rgba(11, 19, 43, 0.06);
+      --shadow-hover: 0 18px 38px -12px rgba(11, 19, 43, 0.14), 0 4px 12px -2px rgba(2, 132, 199, 0.08);
+      --radius-xl: 22px;
+      --radius-lg: 16px;
+      --radius-md: 12px;
+      --radius-sm: 8px;
+      --safe-bottom: env(safe-area-inset-bottom, 0px);
+      --ease-luxury: cubic-bezier(0.22, 1, 0.36, 1);
+      --font-sans: -apple-system, BlinkMacSystemFont, "SF Pro Text", "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+      --font-display: -apple-system, BlinkMacSystemFont, "SF Pro Display", "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+    }
+
+    *, *::before, *::after {
+      box-sizing: border-box;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    html {
+      font-size: 16px;
+      background: var(--bg);
+      color: var(--night);
+      font-family: var(--font-sans);
+      line-height: 1.5;
+      scroll-behavior: smooth;
+    }
+
+    body {
+      margin: 0;
+      min-height: 100dvh;
+      background: var(--bg);
+      color: var(--night);
+      padding-bottom: calc(84px + var(--safe-bottom));
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+      overflow-x: hidden;
+      position: relative;
+    }
+
+    button, input, select, textarea {
+      font: inherit;
+      color: inherit;
+    }
+
+    button {
+      cursor: pointer;
+      border: none;
+      background: none;
+    }
+
+    :focus-visible {
+      outline: 2px solid var(--ocean);
+      outline-offset: 2px;
+    }
+
+    .tabular-nums {
+      font-variant-numeric: tabular-nums;
+    }
+
+    /* ============================================================
+       3D AMBIENT LIGHT SPHERES BACKGROUND
+       ============================================================ */
+    .ambient-stage {
+      position: fixed;
+      inset: 0;
+      z-index: 0;
+      pointer-events: none;
+      overflow: hidden;
+      perspective: 1200px;
+    }
+
+    .ambient-orb {
+      position: absolute;
+      border-radius: 50%;
+      filter: blur(76px);
+      will-change: transform;
+      opacity: 0.42;
+    }
+
+    .ambient-orb-ocean {
+      width: 520px;
+      height: 520px;
+      top: -160px;
+      right: -120px;
+      background: radial-gradient(circle at 35% 35%, rgba(14, 165, 233, 0.52), rgba(2, 132, 199, 0.12) 65%, transparent 75%);
+      animation: float3D 18s var(--ease-luxury) infinite alternate;
+    }
+
+    .ambient-orb-gold {
+      width: 440px;
+      height: 440px;
+      bottom: -140px;
+      left: -130px;
+      background: radial-gradient(circle at 60% 40%, rgba(217, 119, 6, 0.34), rgba(197, 155, 39, 0.1) 65%, transparent 75%);
+      animation: float3DAlt 22s var(--ease-luxury) infinite alternate;
+    }
+
+    .ambient-orb-mist {
+      width: 340px;
+      height: 340px;
+      top: 40%;
+      left: 48%;
+      background: radial-gradient(circle, rgba(14, 165, 233, 0.16), transparent 70%);
+      animation: float3DMid 26s ease-in-out infinite alternate;
+    }
+
+    @keyframes float3D {
+      0% { transform: translate3d(0, 0, 0) scale(1) rotate(0deg); }
+      50% { transform: translate3d(-42px, 34px, 40px) scale(1.06) rotate(8deg); }
+      100% { transform: translate3d(20px, 68px, -20px) scale(0.96) rotate(-6deg); }
+    }
+
+    @keyframes float3DAlt {
+      0% { transform: translate3d(0, 0, 0) scale(1); }
+      50% { transform: translate3d(48px, -32px, 30px) scale(1.08); }
+      100% { transform: translate3d(-18px, -54px, 0) scale(0.95); }
+    }
+
+    @keyframes float3DMid {
+      0% { transform: translate3d(-50%, -20%, 0) scale(0.95); }
+      100% { transform: translate3d(-38%, 10%, 30px) scale(1.08); }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      .ambient-orb, .status-dot { animation: none !important; }
+      .tab-panel { animation: none !important; }
+      * { transition-duration: 0.01ms !important; }
+    }
+
+    /* ============================================================
+       COMPACT GLASSMORPHISM HERO HEADER
+       ============================================================ */
+    .app-header {
+      position: sticky;
+      top: 0;
+      z-index: 30;
+      background: rgba(246, 248, 251, 0.78);
+      backdrop-filter: blur(18px);
+      -webkit-backdrop-filter: blur(18px);
+      border-bottom: 1px solid var(--border);
+    }
+
+    .header-inner {
+      max-width: 1160px;
+      margin: 0 auto;
+      min-height: 62px;
+      padding: 8px 16px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+    }
+
+    @media (min-width: 768px) {
+      .header-inner {
+        padding: 10px 24px;
+      }
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 11px;
+      text-decoration: none;
+      color: var(--night);
+      min-width: 0;
+    }
+
+    .brand-mark {
+      width: 36px;
+      height: 36px;
+      border-radius: 10px;
+      background: var(--night);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      box-shadow: 0 4px 12px rgba(11, 19, 43, 0.16);
+    }
+
+    .brand-copy {
+      display: flex;
+      flex-direction: column;
+      min-width: 0;
+    }
+
+    .brand-name {
+      font-family: var(--font-display);
+      font-size: 1.12rem;
+      font-weight: 800;
+      letter-spacing: -0.03em;
+      line-height: 1.1;
+      color: var(--night);
+      white-space: nowrap;
+    }
+
+    .brand-name span {
+      color: var(--ocean);
+    }
+
+    .brand-sub {
+      font-size: 0.68rem;
+      font-weight: 500;
+      letter-spacing: 0.01em;
+      color: var(--muted);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      margin-top: 2px;
+    }
+
+    .header-actions {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      flex-shrink: 0;
+    }
+
+    .cloud-badge {
+      display: none;
+      align-items: center;
+      gap: 7px;
+      padding: 6px 11px;
+      border-radius: 999px;
+      background: var(--glass);
+      border: 1px solid var(--border);
+      font-size: 0.75rem;
+      font-weight: 600;
+      color: var(--slate);
+      white-space: nowrap;
+    }
+
+    @media (min-width: 680px) {
+      .cloud-badge {
+        display: inline-flex;
+      }
+    }
+
+    .btn-header-install {
+      min-height: 38px;
+      padding: 7px 13px;
+      border-radius: 10px;
+      background: var(--night);
+      color: #FFFFFF;
+      font-size: 0.78rem;
+      font-weight: 600;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      white-space: nowrap;
+      transition: transform 0.18s var(--ease-luxury), background 0.18s ease;
+    }
+
+    .btn-header-install:hover {
+      background: #1E293B;
+    }
+
+    .btn-header-install:active {
+      transform: scale(0.97);
+    }
+
+    .btn-icon-glass {
+      min-width: 40px;
+      min-height: 40px;
+      border-radius: 10px;
+      background: var(--glass);
+      border: 1px solid var(--border);
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--slate);
+      transition: background 0.16s ease, color 0.16s ease, transform 0.18s var(--ease-luxury);
+    }
+
+    .btn-icon-glass:hover {
+      background: #FFFFFF;
+      color: var(--night);
+    }
+
+    .btn-icon-glass:active {
+      transform: scale(0.95);
+    }
+
+    .btn-icon-glass.spinning svg {
+      animation: spinOnce 0.65s var(--ease-luxury);
+    }
+
+    @keyframes spinOnce {
+      from { transform: rotate(0deg); }
+      to { transform: rotate(360deg); }
+    }
+
+    /* ============================================================
+       MAIN STAGE & 3D TAB PANEL TRANSITIONS
+       ============================================================ */
+    .app-main {
+      position: relative;
+      z-index: 1;
+      max-width: 1160px;
+      margin: 0 auto;
+      padding: 18px 16px 24px 16px;
+      perspective: 1400px;
+    }
+
+    @media (min-width: 768px) {
+      .app-main {
+        padding: 28px 24px 36px 24px;
+      }
+    }
+
+    .tab-panel {
+      display: none;
+      transform-style: preserve-3d;
+    }
+
+    .tab-panel.active {
+      display: block;
+      animation: panelEnter3D 0.36s var(--ease-luxury) both;
+    }
+
+    @keyframes panelEnter3D {
+      0% {
+        opacity: 0;
+        transform: perspective(1200px) translate3d(0, 14px, -36px) rotateX(1.5deg);
+      }
+      100% {
+        opacity: 1;
+        transform: perspective(1200px) translate3d(0, 0, 0) rotateX(0deg);
+      }
+    }
+
+    .section-head {
+      margin-bottom: 18px;
+    }
+
+    .section-kicker {
+      font-size: 0.74rem;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--ocean);
+      margin-bottom: 4px;
+    }
+
+    .section-head h1 {
+      margin: 0 0 6px 0;
+      font-family: var(--font-display);
+      font-size: clamp(1.42rem, 2.8vw, 1.95rem);
+      font-weight: 800;
+      letter-spacing: -0.03em;
+      color: var(--night);
+      text-wrap: balance;
+      line-height: 1.15;
+    }
+
+    .section-head p {
+      margin: 0;
+      font-size: 0.92rem;
+      color: var(--slate);
+      max-width: 68ch;
+    }
+
+    /* Status Dot (8px luminous) */
+    .status-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      flex-shrink: 0;
+      display: inline-block;
+    }
+
+    .dot-available {
+      background: var(--green);
+      box-shadow: 0 0 0 3px rgba(22, 163, 74, 0.18), 0 0 10px rgba(22, 163, 74, 0.55);
+      animation: pulseGreen 2.4s ease-in-out infinite;
+    }
+
+    .dot-limited {
+      background: var(--gold);
+      box-shadow: 0 0 0 3px rgba(197, 155, 39, 0.2), 0 0 10px rgba(217, 119, 6, 0.5);
+      animation: pulseGold 2.4s ease-in-out infinite;
+    }
+
+    .dot-full {
+      background: var(--red);
+      box-shadow: 0 0 0 3px rgba(220, 38, 38, 0.18), 0 0 10px rgba(220, 38, 38, 0.45);
+    }
+
+    .dot-cloud {
+      background: var(--ocean-bright);
+      box-shadow: 0 0 0 3px rgba(14, 165, 233, 0.18);
+    }
+
+    .dot-local {
+      background: var(--gold);
+      box-shadow: 0 0 0 3px rgba(197, 155, 39, 0.16);
+    }
+
+    @keyframes pulseGreen {
+      0%, 100% { box-shadow: 0 0 0 3px rgba(22, 163, 74, 0.18), 0 0 8px rgba(22, 163, 74, 0.45); }
+      50% { box-shadow: 0 0 0 6px rgba(22, 163, 74, 0.08), 0 0 14px rgba(22, 163, 74, 0.7); }
+    }
+
+    @keyframes pulseGold {
+      0%, 100% { box-shadow: 0 0 0 3px rgba(197, 155, 39, 0.2), 0 0 8px rgba(217, 119, 6, 0.4); }
+      50% { box-shadow: 0 0 0 6px rgba(197, 155, 39, 0.08), 0 0 14px rgba(217, 119, 6, 0.65); }
+    }
+
+    /* Offline Banner */
+    .offline-strip {
+      display: none;
+      align-items: center;
+      gap: 10px;
+      padding: 10px 14px;
+      margin-bottom: 16px;
+      border-radius: var(--radius-md);
+      background: var(--glass);
+      backdrop-filter: blur(18px);
+      border: 1px solid rgba(197, 155, 39, 0.35);
+      color: var(--amber-ink);
+      font-size: 0.84rem;
+      font-weight: 600;
+    }
+
+    .offline-strip.visible {
+      display: flex;
+    }
+
+    /* Search & Filter Toolbar */
+    .toolbar-glass {
+      background: var(--glass);
+      backdrop-filter: blur(18px);
+      -webkit-backdrop-filter: blur(18px);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-xl);
+      padding: 14px;
+      margin-bottom: 18px;
+      box-shadow: var(--shadow-card);
+    }
+
+    .search-box {
+      position: relative;
+      margin-bottom: 12px;
+    }
+
+    .search-icon {
+      position: absolute;
+      left: 14px;
+      top: 50%;
+      transform: translateY(-50%);
+      color: var(--muted);
+      pointer-events: none;
+      display: flex;
+    }
+
+    .search-input {
+      width: 100%;
+      min-height: 46px;
+      padding: 11px 44px 11px 42px;
+      background: rgba(246, 248, 251, 0.9);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-md);
+      font-size: 0.94rem;
+      color: var(--night);
+      transition: border-color 0.16s ease, box-shadow 0.16s ease, background 0.16s ease;
+    }
+
+    .search-input::placeholder {
+      color: var(--muted);
+    }
+
+    .search-input:focus {
+      outline: none;
+      background: #FFFFFF;
+      border-color: var(--ocean);
+      box-shadow: 0 0 0 3px rgba(2, 132, 199, 0.12);
+    }
+
+    .search-clear {
+      position: absolute;
+      right: 6px;
+      top: 50%;
+      transform: translateY(-50%);
+      min-width: 38px;
+      min-height: 38px;
+      border-radius: 8px;
+      color: var(--muted);
+      display: none;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .search-clear.visible {
+      display: flex;
+    }
+
+    .filter-pills {
+      display: flex;
+      gap: 8px;
+      overflow-x: auto;
+      scrollbar-width: none;
+    }
+
+    .filter-pills::-webkit-scrollbar {
+      display: none;
+    }
+
+    .filter-pill {
+      min-height: 40px;
+      padding: 8px 15px;
+      border-radius: 999px;
+      background: rgba(246, 248, 251, 0.85);
+      border: 1px solid var(--border);
+      color: var(--slate);
+      font-size: 0.83rem;
+      font-weight: 600;
+      white-space: nowrap;
+      flex-shrink: 0;
+      transition: all 0.18s var(--ease-luxury);
+    }
+
+    .filter-pill:hover {
+      border-color: var(--border-strong);
+      color: var(--night);
+      background: #FFFFFF;
+    }
+
+    .filter-pill.active {
+      background: var(--night);
+      border-color: var(--night);
+      color: #FFFFFF;
+      box-shadow: 0 4px 12px rgba(11, 19, 43, 0.16);
+    }
+
+    .results-meta {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      margin-bottom: 14px;
+      font-size: 0.82rem;
+      color: var(--muted);
+      padding: 0 2px;
+    }
+
+    /* QR Deep-Link Spotlight */
+    .spotlight-banner {
+      display: none;
+      background: var(--glass-strong);
+      backdrop-filter: blur(18px);
+      border: 1.5px solid var(--ocean);
+      border-radius: var(--radius-lg);
+      padding: 14px 16px;
+      margin-bottom: 16px;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      flex-wrap: wrap;
+      box-shadow: var(--shadow-card);
+    }
+
+    .spotlight-banner.visible {
+      display: flex;
+    }
+
+    /* ============================================================
+       3D TILT GLASS CARDS
+       ============================================================ */
+    .lidi-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 18px;
+      perspective: 1200px;
+    }
+
+    @media (min-width: 720px) {
+      .lidi-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+
+    @media (min-width: 1060px) {
+      .lidi-grid {
+        grid-template-columns: repeat(3, 1fr);
+      }
+    }
+
+    .lido-card {
+      position: relative;
+      background: var(--glass);
+      backdrop-filter: blur(18px);
+      -webkit-backdrop-filter: blur(18px);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-xl);
+      padding: 20px;
+      box-shadow: var(--shadow-card);
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      gap: 16px;
+      transform-style: preserve-3d;
+      will-change: transform;
+      transition: transform 0.28s var(--ease-luxury), box-shadow 0.28s var(--ease-luxury), border-color 0.2s ease;
+      overflow: hidden;
+    }
+
+    .lido-card::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      border-radius: inherit;
+      pointer-events: none;
+      opacity: 0;
+      background: radial-gradient(
+        420px circle at var(--mx, 50%) var(--my, 50%),
+        rgba(14, 165, 233, 0.13),
+        rgba(197, 155, 39, 0.05) 35%,
+        transparent 68%
+      );
+      transition: opacity 0.25s ease;
+    }
+
+    .lido-card.tilting::before,
+    .lido-card:hover::before {
+      opacity: 1;
+    }
+
+    .lido-card:hover {
+      box-shadow: var(--shadow-hover);
+      border-color: rgba(2, 132, 199, 0.2);
+    }
+
+    .lido-card-inner-3d {
+      transform: translateZ(14px);
+    }
+
+    .lido-card-top {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+    }
+
+    .status-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 6px 11px;
+      border-radius: 999px;
+      font-size: 0.76rem;
+      font-weight: 700;
+      letter-spacing: 0.01em;
+    }
+
+    .status-available {
+      background: var(--green-tint);
+      color: var(--green-ink);
+    }
+
+    .status-limited {
+      background: var(--amber-tint);
+      color: var(--amber-ink);
+    }
+
+    .status-full {
+      background: var(--red-tint);
+      color: var(--red-ink);
+    }
+
+    .fav-btn {
+      min-width: 44px;
+      min-height: 44px;
+      margin: -8px -8px 0 0;
+      border-radius: 12px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--muted);
+      transition: transform 0.18s var(--ease-luxury), color 0.16s ease, background 0.16s ease;
+    }
+
+    .fav-btn:hover {
+      background: rgba(15, 23, 42, 0.04);
+      color: var(--night);
+    }
+
+    .fav-btn.is-fav {
+      color: var(--red);
+    }
+
+    .fav-btn:active {
+      transform: scale(0.88);
+    }
+
+    .lido-title {
+      margin: 10px 0 4px 0;
+      font-family: var(--font-display);
+      font-size: 1.14rem;
+      font-weight: 700;
+      letter-spacing: -0.02em;
+      color: var(--night);
+      line-height: 1.28;
+    }
+
+    .lido-location {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      margin: 0;
+      font-size: 0.85rem;
+      color: var(--slate);
+    }
+
+    .lido-formula-line {
+      margin-top: 12px;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 5px 10px;
+      border-radius: 7px;
+      background: var(--ocean-tint);
+      color: var(--ocean-dark);
+      font-size: 0.75rem;
+      font-weight: 700;
+    }
+
+    .services-pills {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      margin-top: 12px;
+      padding-top: 12px;
+      border-top: 1px solid var(--border);
+    }
+
+    .service-chip {
+      padding: 4px 9px;
+      border-radius: 6px;
+      background: var(--surface-subtle);
+      border: 1px solid var(--border);
+      font-size: 0.74rem;
+      font-weight: 500;
+      color: var(--slate);
+    }
+
+    .lido-promo {
+      background: var(--gold-tint);
+      border: 1px solid rgba(197, 155, 39, 0.25);
+      border-radius: var(--radius-md);
+      padding: 11px 13px;
+      font-size: 0.83rem;
+      font-weight: 500;
+      color: var(--night);
+      line-height: 1.45;
+    }
+
+    .lido-promo-head {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 0.7rem;
+      font-weight: 700;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      color: var(--gold-ink);
+      margin-bottom: 3px;
+    }
+
+    .lido-card-foot {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      transform: translateZ(16px);
+    }
+
+    .lido-updated {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      font-size: 0.75rem;
+      color: var(--muted);
+    }
+
+    .btn-whatsapp {
+      min-height: 46px;
+      width: 100%;
+      padding: 11px 16px;
+      border-radius: var(--radius-md);
+      background: var(--night);
+      color: #FFFFFF;
+      text-decoration: none;
+      font-size: 0.86rem;
+      font-weight: 600;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      transition: background 0.18s ease, transform 0.18s var(--ease-luxury), box-shadow 0.18s ease;
+    }
+
+    .btn-whatsapp:hover {
+      background: var(--ocean);
+      box-shadow: 0 8px 18px -6px rgba(2, 132, 199, 0.45);
+    }
+
+    .btn-whatsapp:active {
+      transform: scale(0.98);
+    }
+
+    /* ============================================================
+       GLASS PANELS & FORMS
+       ============================================================ */
+    .glass-card {
+      background: var(--glass);
+      backdrop-filter: blur(18px);
+      -webkit-backdrop-filter: blur(18px);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-xl);
+      padding: 22px;
+      box-shadow: var(--shadow-card);
+    }
+
+    .two-col-desktop {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 20px;
+      align-items: start;
+    }
+
+    @media (min-width: 900px) {
+      .two-col-desktop {
+        grid-template-columns: 1.22fr 0.78fr;
+      }
+    }
+
+    .form-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 16px;
+    }
+
+    @media (min-width: 640px) {
+      .form-grid-2 {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 14px;
+      }
+    }
+
+    .field {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    .field label {
+      font-size: 0.84rem;
+      font-weight: 700;
+      color: var(--night);
+    }
+
+    .field-hint {
+      font-size: 0.77rem;
+      color: var(--muted);
+    }
+
+    .field-error {
+      font-size: 0.79rem;
+      font-weight: 600;
+      color: var(--red);
+      display: none;
+    }
+
+    .field-error.visible {
+      display: block;
+    }
+
+    .input, .select, .textarea {
+      width: 100%;
+      min-height: 46px;
+      padding: 10px 14px;
+      background: rgba(246, 248, 251, 0.85);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-md);
+      font-size: 0.93rem;
+      color: var(--night);
+      transition: border-color 0.16s ease, box-shadow 0.16s ease, background 0.16s ease;
+    }
+
+    .textarea {
+      min-height: 90px;
+      resize: vertical;
+    }
+
+    .input:focus, .select:focus, .textarea:focus {
+      outline: none;
+      background: #FFFFFF;
+      border-color: var(--ocean);
+      box-shadow: 0 0 0 3px rgba(2, 132, 199, 0.12);
+    }
+
+    .checkbox-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 8px;
+    }
+
+    @media (min-width: 560px) {
+      .checkbox-grid {
+        grid-template-columns: 1fr 1fr;
+      }
+    }
+
+    .check-tile {
+      min-height: 46px;
+      padding: 10px 13px;
+      border: 1px solid var(--border);
+      border-radius: var(--radius-md);
+      background: rgba(246, 248, 251, 0.75);
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 0.86rem;
+      font-weight: 500;
+      color: var(--slate);
+      cursor: pointer;
+      transition: all 0.16s ease;
+    }
+
+    .check-tile:has(input:checked) {
+      background: var(--ocean-tint);
+      border-color: rgba(2, 132, 199, 0.4);
+      color: var(--night);
+      font-weight: 600;
+    }
+
+    .check-tile input {
+      width: 17px;
+      height: 17px;
+      accent-color: var(--ocean);
+      flex-shrink: 0;
+    }
+
+    .gdpr-check {
+      padding: 13px 15px;
+      border-radius: var(--radius-md);
+      background: var(--surface-subtle);
+      border: 1px solid var(--border);
+      display: flex;
+      align-items: flex-start;
+      gap: 11px;
+      font-size: 0.83rem;
+      color: var(--slate);
+      cursor: pointer;
+    }
+
+    .gdpr-check input {
+      width: 19px;
+      height: 19px;
+      margin-top: 2px;
+      accent-color: var(--ocean);
+      flex-shrink: 0;
+    }
+
+    .btn-primary {
+      min-height: 48px;
+      padding: 12px 20px;
+      border-radius: var(--radius-md);
+      background: var(--night);
+      color: #FFFFFF;
+      font-size: 0.92rem;
+      font-weight: 600;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      transition: background 0.18s ease, transform 0.18s var(--ease-luxury), box-shadow 0.18s ease;
+    }
+
+    .btn-primary:hover {
+      background: var(--ocean);
+      box-shadow: 0 8px 20px -6px rgba(2, 132, 199, 0.45);
+    }
+
+    .btn-primary:active {
+      transform: scale(0.98);
+    }
+
+    .btn-secondary {
+      min-height: 44px;
+      padding: 10px 16px;
+      border-radius: var(--radius-md);
+      background: var(--surface-subtle);
+      border: 1px solid var(--border);
+      color: var(--night);
+      font-size: 0.86rem;
+      font-weight: 600;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      transition: background 0.16s ease, border-color 0.16s ease;
+    }
+
+    .btn-secondary:hover {
+      background: #FFFFFF;
+      border-color: var(--border-strong);
+    }
+
+    .btn-danger {
+      min-height: 44px;
+      padding: 10px 16px;
+      border-radius: var(--radius-md);
+      background: var(--red-tint);
+      border: 1px solid rgba(220, 38, 38, 0.2);
+      color: var(--red-ink);
+      font-size: 0.86rem;
+      font-weight: 600;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      transition: background 0.16s ease;
+    }
+
+    .btn-danger:hover {
+      background: rgba(220, 38, 38, 0.16);
+    }
+
+    /* ============================================================
+       CONTROL CENTER (AREA GESTORI)
+       ============================================================ */
+    .giant-status-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 10px;
+    }
+
+    @media (min-width: 640px) {
+      .giant-status-grid {
+        grid-template-columns: repeat(3, 1fr);
+      }
+    }
+
+    .giant-status-btn {
+      min-height: 78px;
+      padding: 14px 16px;
+      border-radius: var(--radius-lg);
+      border: 1px solid var(--border);
+      background: rgba(246, 248, 251, 0.8);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      text-align: center;
+      font-weight: 700;
+      font-size: 0.88rem;
+      color: var(--night);
+      transition: all 0.2s var(--ease-luxury);
+    }
+
+    .giant-status-btn:hover {
+      background: #FFFFFF;
+      transform: translateY(-1px);
+    }
+
+    .giant-status-btn:active {
+      transform: scale(0.98);
+    }
+
+    .giant-status-btn.selected-available {
+      background: var(--green-tint);
+      border-color: rgba(22, 163, 74, 0.45);
+      color: var(--green-ink);
+      box-shadow: 0 6px 18px -6px rgba(22, 163, 74, 0.28);
+    }
+
+    .giant-status-btn.selected-limited {
+      background: var(--amber-tint);
+      border-color: rgba(217, 119, 6, 0.45);
+      color: var(--amber-ink);
+      box-shadow: 0 6px 18px -6px rgba(217, 119, 6, 0.28);
+    }
+
+    .giant-status-btn.selected-full {
+      background: var(--red-tint);
+      border-color: rgba(220, 38, 38, 0.45);
+      color: var(--red-ink);
+      box-shadow: 0 6px 18px -6px rgba(220, 38, 38, 0.28);
+    }
+
+    .promo-chips {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      margin-top: 8px;
+    }
+
+    .promo-chip {
+      min-height: 36px;
+      padding: 6px 11px;
+      border-radius: 8px;
+      background: var(--surface-subtle);
+      border: 1px solid var(--border);
+      color: var(--slate);
+      font-size: 0.77rem;
+      font-weight: 600;
+      transition: all 0.15s ease;
+    }
+
+    .promo-chip:hover {
+      background: var(--ocean-tint);
+      border-color: rgba(2, 132, 199, 0.25);
+      color: var(--ocean-dark);
+    }
+
+    .qr-poster-box {
+      background: var(--glass-strong);
+      backdrop-filter: blur(18px);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-xl);
+      padding: 22px;
+      text-align: center;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 14px;
+      box-shadow: var(--shadow-card);
+    }
+
+    .qr-canvas-wrap {
+      padding: 14px;
+      background: #FFFFFF;
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      display: inline-block;
+      box-shadow: 0 4px 14px rgba(11, 19, 43, 0.05);
+    }
+
+    .qr-canvas-wrap canvas,
+    .qr-canvas-wrap img {
+      display: block;
+      max-width: 100%;
+      height: auto;
+      border-radius: 6px;
+    }
+
+    details.admin-panel {
+      margin-top: 22px;
+      background: var(--glass);
+      backdrop-filter: blur(18px);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-xl);
+      overflow: hidden;
+    }
+
+    details.admin-panel summary {
+      min-height: 54px;
+      padding: 14px 20px;
+      font-size: 0.86rem;
+      font-weight: 700;
+      color: var(--slate);
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      list-style: none;
+    }
+
+    details.admin-panel summary::-webkit-details-marker {
+      display: none;
+    }
+
+    .admin-panel-body {
+      padding: 0 20px 20px 20px;
+      border-top: 1px solid var(--border);
+    }
+
+    /* ============================================================
+       PROFILE & GDPR
+       ============================================================ */
+    .profile-avatar {
+      width: 52px;
+      height: 52px;
+      border-radius: 14px;
+      background: linear-gradient(135deg, var(--night) 0%, var(--ocean) 100%);
+      color: #FFFFFF;
+      font-family: var(--font-display);
+      font-size: 1.15rem;
+      font-weight: 800;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      letter-spacing: 0.02em;
+    }
+
+    .install-steps {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      margin: 12px 0;
+    }
+
+    .install-step {
+      background: var(--surface-subtle);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-md);
+      padding: 12px 14px;
+      font-size: 0.84rem;
+      color: var(--slate);
+      line-height: 1.5;
+    }
+
+    .install-step strong {
+      display: block;
+      margin-bottom: 3px;
+      color: var(--night);
+      font-size: 0.86rem;
+    }
+
+    .gdpr-article {
+      font-size: 0.86rem;
+      color: var(--slate);
+      line-height: 1.65;
+    }
+
+    .gdpr-article h3 {
+      margin: 14px 0 4px 0;
+      font-size: 0.92rem;
+      color: var(--night);
+    }
+
+    .gdpr-article ul {
+      margin: 6px 0;
+      padding-left: 18px;
+    }
+
+    .empty-state {
+      grid-column: 1 / -1;
+      text-align: center;
+      padding: 44px 20px;
+      background: var(--glass);
+      backdrop-filter: blur(18px);
+      border: 1px dashed var(--border-strong);
+      border-radius: var(--radius-xl);
+      color: var(--slate);
+    }
+
+    /* ============================================================
+       BOTTOM TAB BAR (CLEAN 1.5PX SVG ICONS)
+       ============================================================ */
+    .bottom-nav {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      z-index: 40;
+      background: rgba(255, 255, 255, 0.88);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border-top: 1px solid var(--border);
+      padding-bottom: var(--safe-bottom);
+    }
+
+    .bottom-nav-inner {
+      max-width: 720px;
+      margin: 0 auto;
+      height: 64px;
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+    }
+
+    .tab-btn {
+      min-height: 48px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 4px;
+      color: var(--muted);
+      font-size: 0.7rem;
+      font-weight: 600;
+      position: relative;
+      transition: color 0.18s ease;
+    }
+
+    .tab-btn svg {
+      width: 21px;
+      height: 21px;
+      transition: transform 0.22s var(--ease-luxury);
+    }
+
+    .tab-btn.active {
+      color: var(--ocean);
+      font-weight: 700;
+    }
+
+    .tab-btn.active svg {
+      transform: translateY(-1px) scale(1.06);
+    }
+
+    .tab-btn.active::before {
+      content: "";
+      position: absolute;
+      top: 0;
+      width: 34px;
+      height: 2.5px;
+      border-radius: 0 0 4px 4px;
+      background: var(--ocean);
+    }
+
+    /* ============================================================
+       INSTALL MODAL & TOAST
+       ============================================================ */
+    .modal-backdrop {
+      position: fixed;
+      inset: 0;
+      z-index: 60;
+      background: rgba(11, 19, 43, 0.5);
+      backdrop-filter: blur(6px);
+      display: none;
+      align-items: flex-end;
+      justify-content: center;
+    }
+
+    @media (min-width: 640px) {
+      .modal-backdrop {
+        align-items: center;
+        padding: 20px;
+      }
+    }
+
+    .modal-backdrop.open {
+      display: flex;
+    }
+
+    .modal-sheet {
+      width: 100%;
+      max-width: 460px;
+      background: var(--glass-strong);
+      backdrop-filter: blur(22px);
+      border: 1px solid var(--border);
+      border-radius: 24px 24px 0 0;
+      padding: 20px 22px calc(24px + var(--safe-bottom)) 22px;
+      box-shadow: 0 -14px 40px rgba(11, 19, 43, 0.22);
+      max-height: 88dvh;
+      overflow-y: auto;
+    }
+
+    @media (min-width: 640px) {
+      .modal-sheet {
+        border-radius: 22px;
+        padding: 24px;
+      }
+    }
+
+    .sheet-handle {
+      width: 40px;
+      height: 4px;
+      background: rgba(15, 23, 42, 0.16);
+      border-radius: 999px;
+      margin: 0 auto 16px auto;
+    }
+
+    @media (min-width: 640px) {
+      .sheet-handle {
+        display: none;
+      }
+    }
+
+    .toast {
+      position: fixed;
+      left: 50%;
+      bottom: calc(78px + var(--safe-bottom));
+      transform: translateX(-50%) translateY(14px);
+      z-index: 70;
+      background: var(--night);
+      color: #FFFFFF;
+      padding: 10px 18px;
+      border-radius: 999px;
+      font-size: 0.83rem;
+      font-weight: 600;
+      box-shadow: 0 10px 28px rgba(11, 19, 43, 0.26);
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.22s var(--ease-luxury), transform 0.22s var(--ease-luxury);
+      max-width: calc(100vw - 32px);
+      text-align: center;
+    }
+
+    .toast.visible {
+      opacity: 1;
+      transform: translateX(-50%) translateY(0);
+    }
+
+    @media print {
+      .ambient-stage, .app-header, .bottom-nav, .no-print {
+        display: none !important;
+      }
+      body {
+        padding: 0;
+        background: #FFFFFF;
+      }
+      .qr-poster-box {
+        border: 1px solid #0B132B;
+        box-shadow: none;
+        page-break-inside: avoid;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- 3D Ambient Light Spheres -->
+  <div class="ambient-stage" aria-hidden="true">
+    <div class="ambient-orb ambient-orb-ocean"></div>
+    <div class="ambient-orb ambient-orb-gold"></div>
+    <div class="ambient-orb ambient-orb-mist"></div>
+  </div>
+
+  <!-- Compact Glassmorphism Header -->
+  <header class="app-header">
+    <div class="header-inner">
+      <a href="#esplora" class="brand" id="brand-home">
+        <div class="brand-mark" aria-hidden="true">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="17" cy="7" r="2.5" stroke="#C59B27"/>
+            <path d="M3 13.5c2.5-2.5 5.5-2.5 8 0s5.5 2.5 8 0" stroke="#0EA5E9"/>
+            <path d="M3 18c2.5-2 5.5-2 8 0s5.5 2 8 0" stroke="#FFFFFF"/>
+          </svg>
+        </div>
+        <div class="brand-copy">
+          <span class="brand-name">Lido<span>Pass</span></span>
+          <span class="brand-sub">Coastal Booking &amp; Live Availability Network</span>
+        </div>
+      </a>
+
+      <div class="header-actions">
+        <div class="cloud-badge" id="header-cloud-badge" title="Stato sincronizzazione">
+          <span class="status-dot dot-local" id="header-cloud-dot"></span>
+          <span id="header-cloud-text">Archivio Locale</span>
+        </div>
+
+        <button type="button" class="btn-header-install" id="header-install-btn" aria-label="Installa App">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <rect x="6" y="2" width="12" height="20" rx="2.5"/>
+            <path d="M12 18h.01"/>
+          </svg>
+          <span>Installa App</span>
+        </button>
+
+        <button type="button" class="btn-icon-glass" id="header-refresh-btn" title="Aggiorna disponibilità live" aria-label="Aggiorna disponibilità live">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="M21 12a9 9 0 1 1-2.64-6.36"/>
+            <polyline points="21 3 21 9 15 9"/>
+          </svg>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <main class="app-main">
+    <!-- Offline Status Notice -->
+    <div id="offline-strip" class="offline-strip" role="status" aria-live="polite">
+      <span class="status-dot dot-limited"></span>
+      <span>Connessione assente: consultazione offline attiva tramite memoria locale del dispositivo.</span>
+    </div>
+
+    <!-- =========================================================
+         SCHEDA 1: ESPLORA
+         ========================================================= -->
+    <section id="tab-esplora" class="tab-panel active" aria-labelledby="title-esplora">
+      <div id="qr-spotlight" class="spotlight-banner">
+        <div>
+          <div style="font-size: 0.72rem; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase; color: var(--ocean);">Accesso Diretto QR Struttura</div>
+          <div id="qr-spotlight-name" style="font-weight: 700; font-size: 1.02rem; color: var(--night); margin-top: 2px;"></div>
+        </div>
+        <button type="button" class="btn-secondary" id="qr-spotlight-reset">Mostra tutte le strutture</button>
+      </div>
+
+      <div class="section-head">
+        <div class="section-kicker">Costa Adriatica · Disponibilità Live</div>
+        <h1 id="title-esplora">Stabilimenti, Beach Club &amp; Impianti</h1>
+        <p>Verifica in tempo reale la disponibilità di ombrelloni, formule contrattuali e campi sportivi con contatto diretto WhatsApp.</p>
+      </div>
+
+      <div class="toolbar-glass">
+        <div class="search-box">
+          <span class="search-icon" aria-hidden="true">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="11" cy="11" r="7.5"/>
+              <path d="m20 20-3.8-3.8"/>
+            </svg>
+          </span>
+          <input
+            type="search"
+            id="explore-search"
+            class="search-input"
+            placeholder="Cerca località o struttura (es. Fano, Marotta, Pesaro, Senigallia)..."
+            autocomplete="off"
+            aria-label="Cerca strutture per città o nome"
+          />
+          <button type="button" id="explore-search-clear" class="search-clear" aria-label="Cancella ricerca">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M18 6 6 18M6 6l12 12"/>
+            </svg>
+          </button>
+        </div>
+
+        <div class="filter-pills" role="tablist" aria-label="Filtra per tipologia offerta">
+          <button type="button" class="filter-pill active" data-filter="all" role="tab" aria-selected="true">Tutte le strutture</button>
+          <button type="button" class="filter-pill" data-filter="daily" role="tab" aria-selected="false">Accesso Giornaliero</button>
+          <button type="button" class="filter-pill" data-filter="seasonal" role="tab" aria-selected="false">Stagionali &amp; Mensili</button>
+          <button type="button" class="filter-pill" data-filter="sport" role="tab" aria-selected="false">Sport &amp; Sunset Lounge</button>
+        </div>
+      </div>
+
+      <div class="results-meta">
+        <span id="explore-count" class="tabular-nums">0 strutture rilevate</span>
+        <span id="cloud-mode-label">Archivio Locale · Demo</span>
+      </div>
+
+      <div id="lidi-grid" class="lidi-grid" aria-live="polite"></div>
+    </section>
+
+    <!-- =========================================================
+         SCHEDA 2: REGISTRA STRUTTURA (SELF-SERVICE BUSINESS)
+         ========================================================= -->
+    <section id="tab-registra" class="tab-panel" aria-labelledby="title-registra">
+      <div class="section-head">
+        <div class="section-kicker">Self-Service Business Onboarding</div>
+        <h1 id="title-registra">Registra Struttura</h1>
+        <p>Inserimento gratuito per stabilimenti balneari, beach club e impianti sportivi della Costa Adriatica.</p>
+      </div>
+
+      <div id="reg-form-container" class="glass-card" style="max-width: 780px;">
+        <form id="register-lido-form" class="form-grid" novalidate>
+          <div class="form-grid-2">
+            <div class="field">
+              <label for="reg-name">Ragione Sociale / Nome Struttura *</label>
+              <input type="text" id="reg-name" class="input" placeholder="Es. Bagni Miramare Srl" required />
+              <span class="field-error" id="err-reg-name">Inserisci la ragione sociale o il nome della struttura.</span>
+            </div>
+
+            <div class="field">
+              <label for="reg-city">Località / Città *</label>
+              <input type="text" id="reg-city" class="input" placeholder="Es. Fano, Senigallia, Pesaro, Marotta" required />
+              <span class="field-error" id="err-reg-city">Inserisci la località della struttura.</span>
+            </div>
+          </div>
+
+          <div class="field">
+            <label for="reg-address">Indirizzo Completo *</label>
+            <input type="text" id="reg-address" class="input" placeholder="Es. Lungomare Sassonia 42" required />
+            <span class="field-error" id="err-reg-address">Inserisci l'indirizzo della struttura.</span>
+          </div>
+
+          <div class="form-grid-2">
+            <div class="field">
+              <label for="reg-piva">Partita IVA (11 cifre numeriche) *</label>
+              <input type="text" id="reg-piva" class="input tabular-nums" inputmode="numeric" maxlength="11" placeholder="Es. 01234567890" required />
+              <span class="field-hint tabular-nums" id="reg-piva-counter">0 / 11 cifre numeriche</span>
+              <span class="field-error" id="err-reg-piva">La Partita IVA deve contenere esattamente 11 cifre numeriche.</span>
+            </div>
+
+            <div class="field">
+              <label for="reg-whatsapp">Recapito WhatsApp Business (es. 393...) *</label>
+              <input type="tel" id="reg-whatsapp" class="input tabular-nums" inputmode="tel" placeholder="Es. 393331234567" required />
+              <span class="field-hint">Prefisso internazionale senza simbolo + (es. 393...).</span>
+              <span class="field-error" id="err-reg-whatsapp">Inserisci un recapito WhatsApp Business valido.</span>
+            </div>
+          </div>
+
+          <div class="form-grid-2">
+            <div class="field">
+              <label for="reg-formula">Tipologia Offerta *</label>
+              <select id="reg-formula" class="select" required>
+                <option value="Stagionali + Giornalieri">Stagionali + Giornalieri</option>
+                <option value="Prevalentemente Stagionali/Mensili">Prevalentemente Stagionali/Mensili</option>
+                <option value="Giornalieri, Sport & Eventi">Giornalieri, Sport &amp; Eventi</option>
+              </select>
+            </div>
+
+            <div class="field">
+              <label for="reg-pin">PIN Sicurezza Gestore (4 cifre) *</label>
+              <input type="password" id="reg-pin" class="input tabular-nums" inputmode="numeric" maxlength="4" placeholder="Es. 4821" required />
+              <span class="field-hint">Richiesto nell'Area Gestori per aggiornare stato ed eventi.</span>
+              <span class="field-error" id="err-reg-pin">Inserisci un PIN numerico esatto di 4 cifre.</span>
+            </div>
+          </div>
+
+          <div class="field">
+            <label>Servizi Attivi</label>
+            <div class="checkbox-grid">
+              <label class="check-tile"><input type="checkbox" name="reg-service" value="Ombrelloni & Gazebo" checked /> Ombrelloni &amp; Gazebo</label>
+              <label class="check-tile"><input type="checkbox" name="reg-service" value="Piscina & Idromassaggio" /> Piscina &amp; Idromassaggio</label>
+              <label class="check-tile"><input type="checkbox" name="reg-service" value="Campi Beach Volley / Tennis" /> Campi Beach Volley / Tennis</label>
+              <label class="check-tile"><input type="checkbox" name="reg-service" value="Ristorante & Lounge Bar" /> Ristorante &amp; Lounge Bar</label>
+              <label class="check-tile"><input type="checkbox" name="reg-service" value="Accessibilità Completa" /> Accessibilità Completa</label>
+            </div>
+          </div>
+
+          <div class="field">
+            <label for="reg-promo">Aggiornamento / Evento del Giorno (facoltativo)</label>
+            <input type="text" id="reg-promo" class="input" placeholder="Es. Sunset Lounge dalle 18:30 con selezione musicale acustica" />
+          </div>
+
+          <div class="field">
+            <label class="gdpr-check">
+              <input type="checkbox" id="reg-gdpr" required />
+              <span>Dichiaro di essere il titolare o legale rappresentante autorizzato della struttura e acconsento al trattamento dei dati commerciali secondo l'<a href="#profilo" id="reg-open-gdpr" style="color: var(--ocean-dark); font-weight: 700;">Informativa Privacy GDPR</a>.</span>
+            </label>
+            <span class="field-error" id="err-reg-gdpr">Conferma la titolarità e accetta l'Informativa Privacy GDPR per procedere.</span>
+          </div>
+
+          <button type="submit" class="btn-primary" id="reg-submit-btn">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <path d="M5 12l5 5L20 7"/>
+            </svg>
+            <span>Pubblica Struttura su LidoPass</span>
+          </button>
+        </form>
+      </div>
+
+      <!-- Registration Confirmation + Official QR Code -->
+      <div id="reg-success-container" class="glass-card" style="display: none; max-width: 780px;">
+        <div style="display: flex; align-items: center; gap: 14px; margin-bottom: 18px;">
+          <div style="width: 48px; height: 48px; border-radius: 14px; background: var(--green-tint); color: var(--green); display: flex; align-items: center; justify-content: center; flex-shrink: 0;">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/>
+              <polyline points="22 4 12 14.01 9 11.01"/>
+            </svg>
+          </div>
+          <div>
+            <h2 style="margin: 0; font-size: 1.2rem; letter-spacing: -0.02em;">Struttura registrata con successo</h2>
+            <p style="margin: 2px 0 0 0; font-size: 0.88rem; color: var(--slate);">La scheda è attiva e consultabile in tempo reale nella sezione Esplora.</p>
+          </div>
+        </div>
+
+        <div class="two-col-desktop">
+          <div>
+            <div style="background: var(--surface-subtle); border: 1px solid var(--border); border-radius: var(--radius-md); padding: 16px; margin-bottom: 16px;">
+              <div style="font-size: 0.72rem; letter-spacing: 0.06em; text-transform: uppercase; color: var(--muted); font-weight: 700;">Riepilogo Credenziali Struttura</div>
+              <div id="reg-summary-name" style="font-size: 1.12rem; font-weight: 700; margin-top: 6px; color: var(--night);"></div>
+              <div id="reg-summary-loc" style="font-size: 0.86rem; color: var(--slate); margin-top: 2px;"></div>
+              <div style="margin-top: 14px; padding-top: 12px; border-top: 1px solid var(--border); display: flex; justify-content: space-between; align-items: center;">
+                <span style="font-size: 0.84rem; font-weight: 600; color: var(--slate);">PIN Sicurezza Gestore</span>
+                <strong id="reg-summary-pin" class="tabular-nums" style="font-size: 1.25rem; letter-spacing: 0.16em; color: var(--ocean-dark); background: var(--ocean-tint); padding: 5px 13px; border-radius: 8px;"></strong>
+              </div>
+            </div>
+
+            <div style="display: flex; flex-wrap: wrap; gap: 10px;">
+              <button type="button" class="btn-primary" id="reg-goto-explore">Vai a Esplora</button>
+              <button type="button" class="btn-secondary" id="reg-goto-manager">Apri Area Gestori</button>
+              <button type="button" class="btn-secondary" id="reg-new-another">Registra Nuova Struttura</button>
+            </div>
+          </div>
+
+          <div class="qr-poster-box">
+            <div style="font-size: 0.74rem; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase; color: var(--ocean-dark);">QR Code Ufficiale</div>
+            <div class="qr-canvas-wrap">
+              <img id="reg-qr-img" width="200" height="200" alt="QR Code ufficiale della struttura" referrerpolicy="no-referrer" />
+            </div>
+            <p id="reg-qr-caption" style="margin: 0; font-size: 0.82rem; color: var(--slate);"></p>
+            <button type="button" class="btn-secondary" id="reg-download-qr" style="width: 100%;">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+                <polyline points="7 10 12 15 17 10"/>
+                <line x1="12" y1="15" x2="12" y2="3"/>
+              </svg>
+              <span>Scarica Locandina PNG</span>
+            </button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- =========================================================
+         SCHEDA 3: AREA GESTORI (CONTROL CENTER + QR CODE)
+         ========================================================= -->
+    <section id="tab-gestori" class="tab-panel" aria-labelledby="title-gestori">
+      <div class="section-head">
+        <div class="section-kicker">Management Control Center</div>
+        <h1 id="title-gestori">Area Gestori</h1>
+        <p>Aggiornamento istantaneo dello stato spiaggia, pubblicazione eventi giornalieri e generazione QR Code ad alta definizione.</p>
+      </div>
+
+      <!-- Manager Authentication Card -->
+      <div id="manager-login-card" class="glass-card" style="max-width: 520px;">
+        <form id="manager-login-form" class="form-grid" novalidate>
+          <div class="field">
+            <label for="mgr-lido-select">Seleziona Struttura</label>
+            <select id="mgr-lido-select" class="select"></select>
+          </div>
+
+          <div class="field">
+            <label for="mgr-pin-input">PIN Sicurezza a 4 cifre</label>
+            <input type="password" id="mgr-pin-input" class="input tabular-nums" inputmode="numeric" maxlength="4" placeholder="Inserisci PIN (1234 per Lido Demo)" required />
+            <span class="field-hint">Accesso dimostrativo per <em>Lido Demo · Costa Adriatica</em>: PIN <strong>1234</strong>.</span>
+            <span class="field-error" id="err-mgr-pin">PIN non valido. Verifica le 4 cifre e riprova.</span>
+          </div>
+
+          <button type="submit" class="btn-primary">
+            <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <rect x="3" y="11" width="18" height="11" rx="2"/>
+              <path d="M7 11V7a5 5 0 0 1 9.9-1"/>
+            </svg>
+            <span>Accedi al Control Center</span>
+          </button>
+        </form>
+      </div>
+
+      <!-- Authenticated Control Center -->
+      <div id="manager-dashboard" style="display: none;">
+        <div class="glass-card" style="margin-bottom: 18px; display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 12px;">
+          <div>
+            <div style="font-size: 0.72rem; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase; color: var(--ocean);">Struttura Autenticata</div>
+            <h2 id="mgr-active-name" style="margin: 3px 0 0 0; font-size: 1.2rem; letter-spacing: -0.02em;"></h2>
+            <div id="mgr-active-meta" style="font-size: 0.84rem; color: var(--slate); margin-top: 2px;"></div>
+          </div>
+          <button type="button" class="btn-secondary" id="mgr-logout-btn">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/>
+              <polyline points="16 17 21 12 16 7"/>
+              <line x1="21" y1="12" x2="9" y2="12"/>
+            </svg>
+            <span>Disconnetti</span>
+          </button>
+        </div>
+
+        <div class="two-col-desktop">
+          <div class="form-grid">
+            <div class="glass-card">
+              <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 14px; gap: 8px; flex-wrap: wrap;">
+                <h3 style="margin: 0; font-size: 1rem;">Selettori Stato Live</h3>
+                <span id="mgr-last-updated" class="tabular-nums" style="font-size: 0.78rem; color: var(--muted);"></span>
+              </div>
+
+              <div class="giant-status-grid">
+                <button type="button" class="giant-status-btn" data-status="available" id="btn-status-available">
+                  <span class="status-dot dot-available"></span>
+                  <span>Disponibile</span>
+                </button>
+                <button type="button" class="giant-status-btn" data-status="limited" id="btn-status-limited">
+                  <span class="status-dot dot-limited"></span>
+                  <span>Ultimi Posti</span>
+                </button>
+                <button type="button" class="giant-status-btn" data-status="full" id="btn-status-full">
+                  <span class="status-dot dot-full"></span>
+                  <span>Completo Oggi</span>
+                </button>
+              </div>
+            </div>
+
+            <div class="glass-card">
+              <h3 style="margin: 0 0 8px 0; font-size: 1rem;">Evento / Avviso del Giorno</h3>
+              <div class="field">
+                <label for="mgr-promo-input" class="field-hint" style="font-weight: 500; color: var(--slate);">Visualizzato in evidenza nella scheda pubblica della struttura</label>
+                <textarea id="mgr-promo-input" class="textarea" placeholder="Es. Sunset Lounge dalle 18:30 con servizio cocktail al tramonto"></textarea>
+              </div>
+              <div class="promo-chips">
+                <button type="button" class="promo-chip" data-preset="Sunset Lounge dalle 18:30 con DJ set acustico al tramonto">Sunset Lounge &amp; DJ Set</button>
+                <button type="button" class="promo-chip" data-preset="Torneo Beach Volley dalle ore 17:00 — Iscrizioni aperte in direzione">Torneo Beach Volley</button>
+                <button type="button" class="promo-chip" data-preset="Tariffa Pomeridiana attiva dalle 14:00 per ombrellone e due lettini">Tariffa Pomeridiana</button>
+              </div>
+              <div style="display: flex; flex-wrap: wrap; gap: 10px; margin-top: 14px;">
+                <button type="button" class="btn-primary" id="mgr-save-promo-btn" style="flex: 1;">Salva Aggiornamento</button>
+                <button type="button" class="btn-secondary" id="mgr-clear-promo-btn">Rimuovi Avviso</button>
+              </div>
+            </div>
+          </div>
+
+          <div class="qr-poster-box">
+            <div style="font-size: 0.72rem; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; color: var(--ocean);">QR Code Struttura ad Alta Definizione</div>
+            <div class="qr-canvas-wrap">
+              <img id="mgr-qr-img" width="240" height="240" alt="QR Code ufficiale della struttura" referrerpolicy="no-referrer" />
+            </div>
+            <p id="mgr-qr-caption" style="margin: 0; font-size: 0.85rem; font-weight: 600; color: var(--night); max-width: 280px; line-height: 1.45;"></p>
+            <div id="mgr-qr-url" style="font-size: 0.72rem; color: var(--muted); word-break: break-all;"></div>
+            <div style="display: flex; gap: 8px; width: 100%; flex-wrap: wrap;">
+              <button type="button" class="btn-primary" id="mgr-download-qr" style="flex: 1;">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                  <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+                  <polyline points="7 10 12 15 17 10"/>
+                  <line x1="12" y1="15" x2="12" y2="3"/>
+                </svg>
+                <span>Scarica PNG</span>
+              </button>
+              <button type="button" class="btn-secondary no-print" id="mgr-print-qr">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                  <polyline points="6 9 6 2 18 2 18 9"/>
+                  <path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/>
+                  <rect x="6" y="14" width="12" height="8"/>
+                </svg>
+                <span>Stampa</span>
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Collapsible System Cloud Key Configuration -->
+      <details class="admin-panel">
+        <summary>
+          <span style="display: inline-flex; align-items: center; gap: 8px;">
+            <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <path d="M17.5 19H9a7 7 0 1 1 6.71-9h1.79a4.5 4.5 0 1 1 0 9Z"/>
+            </svg>
+            <span>Configurazione Chiave Cloud Sistema</span>
+          </span>
+          <span style="font-size: 0.76rem; color: var(--ocean);">Espandi</span>
+        </summary>
+        <div class="admin-panel-body">
+          <p style="font-size: 0.84rem; color: var(--slate); margin: 14px 0;">
+            Configura il <strong>Bin ID</strong> e la chiave <strong>X-Master-Key</strong> di <a href="https://jsonbin.io" target="_blank" rel="noopener noreferrer" style="color: var(--ocean-dark); font-weight: 600;">jsonbin.io</a> per attivare la sincronizzazione cloud globale tra dispositivi. Le credenziali rimangono salvate esclusivamente nel browser dell'amministratore.
+          </p>
+          <div class="form-grid">
+            <div class="form-grid-2">
+              <div class="field">
+                <label for="admin-bin-id">JSONBin Bin ID</label>
+                <input type="text" id="admin-bin-id" class="input" placeholder="Es. 67a1b2c3d4e5f6..." />
+              </div>
+              <div class="field">
+                <label for="admin-master-key">JSONBin X-Master-Key</label>
+                <input type="password" id="admin-master-key" class="input" placeholder="$2a$10$..." />
+              </div>
+            </div>
+            <div style="display: flex; flex-wrap: wrap; gap: 10px;">
+              <button type="button" class="btn-primary" id="admin-save-cloud-btn">Salva e Sincronizza</button>
+              <button type="button" class="btn-secondary" id="admin-create-bin-btn">Crea Nuovo Bin Cloud</button>
+              <button type="button" class="btn-secondary" id="admin-clear-cloud-btn">Disattiva Cloud</button>
+            </div>
+            <div id="admin-cloud-status" style="font-size: 0.81rem; color: var(--slate);"></div>
+          </div>
+        </div>
+      </details>
+    </section>
+
+    <!-- =========================================================
+         SCHEDA 4: PROFILO & CONFORMITÀ GDPR
+         ========================================================= -->
+    <section id="tab-profilo" class="tab-panel" aria-labelledby="title-profilo">
+      <div class="section-head">
+        <div class="section-kicker">Preferenze Locali &amp; Conformità Normativa</div>
+        <h1 id="title-profilo">Profilo &amp; Privacy</h1>
+        <p>Gestione profilo locale su dispositivo, strutture salvate, guida all'installazione PWA e Informativa GDPR.</p>
+      </div>
+
+      <div class="two-col-desktop">
+        <div class="form-grid">
+          <div class="glass-card">
+            <div style="display: flex; align-items: center; gap: 14px; margin-bottom: 16px;">
+              <div class="profile-avatar" id="profile-avatar">LP</div>
+              <div>
+                <h2 id="profile-greeting" style="margin: 0; font-size: 1.08rem;">Ospite Costa Adriatica</h2>
+                <div id="profile-sub" style="font-size: 0.82rem; color: var(--slate);">Archiviazione locale esclusiva su dispositivo</div>
+              </div>
+            </div>
+
+            <form id="profile-form" class="form-grid">
+              <div class="form-grid-2">
+                <div class="field">
+                  <label for="prof-name">Nome o Riferimento</label>
+                  <input type="text" id="prof-name" class="input" placeholder="Es. Marco Rossi" />
+                </div>
+                <div class="field">
+                  <label for="prof-city">Località preferita</label>
+                  <input type="text" id="prof-city" class="input" placeholder="Es. Fano, Senigallia, Pesaro" />
+                </div>
+              </div>
+
+              <div class="field">
+                <label for="prof-email">Email personale (opzionale, solo locale)</label>
+                <input type="email" id="prof-email" class="input" placeholder="Es. nome@dominio.it" />
+              </div>
+
+              <button type="submit" class="btn-primary">Salva Preferenze Locali</button>
+            </form>
+          </div>
+
+          <div class="glass-card">
+            <h2 style="margin: 0 0 12px 0; font-size: 1.04rem;">Strutture Preferite</h2>
+            <div id="favorites-list" class="form-grid"></div>
+          </div>
+
+          <div class="glass-card">
+            <h2 style="margin: 0 0 6px 0; font-size: 1.04rem;">Installazione App su iOS e Android</h2>
+            <p style="margin: 0 0 10px 0; font-size: 0.84rem; color: var(--slate);">Aggiungi LidoPass alla schermata Home per accedere a schermo intero.</p>
+            <div class="install-steps">
+              <div class="install-step">
+                <strong>iPhone / iPad (Safari)</strong>
+                Tocca il pulsante Condividi nella barra di Safari, scorri verso il basso e seleziona "Aggiungi a schermata Home".
+              </div>
+              <div class="install-step">
+                <strong>Android (Chrome / Edge)</strong>
+                Apri il menu del browser in alto a destra e tocca "Installa app" oppure "Aggiungi a schermata Home".
+              </div>
+            </div>
+            <button type="button" class="btn-secondary" id="profile-open-install-btn" style="width: 100%;">Apri Procedura Guidata Installazione</button>
+          </div>
+        </div>
+
+        <div class="glass-card">
+          <h2 style="margin: 0 0 4px 0; font-size: 1.08rem;">Informativa Privacy ai sensi del Regolamento (UE) 2016/679 (GDPR)</h2>
+          <p style="margin: 0 0 12px 0; font-size: 0.8rem; color: var(--muted);">Principi di minimizzazione dei dati e Privacy by Design</p>
+
+          <div class="gdpr-article">
+            <h3>1. Assenza di Cookie di Profilazione</h3>
+            <p>LidoPass non utilizza cookie di tracciamento, profilazione comportamentale o script pubblicitari di terze parti. La consultazione delle strutture avviene in forma anonima.</p>
+
+            <h3>2. Trattamento Locale dei Dati Utente</h3>
+            <p>Le preferenze inserite dall'utente (nome, località preferita, email opzionale ed elenco delle strutture salvate nei preferiti) sono memorizzate esclusivamente nella memoria locale del dispositivo (<code>localStorage</code>) e non vengono trasmesse a server remoti.</p>
+
+            <h3>3. Pubblicazione Volontaria Dati Commerciali</h3>
+            <p>La registrazione delle strutture è volontaria e riservata a soggetti economici. Ragione sociale, indirizzo, Partita IVA a 11 cifre e recapito WhatsApp Business sono conferiti dal titolare o legale rappresentante ai sensi dell'art. 6 par. 1 lett. b) e f) GDPR al fine di esporre disponibilità e canali di contatto pubblico.</p>
+
+            <h3>4. Reindirizzamento Diretto WhatsApp</h3>
+            <p>Il pulsante di contatto apre un collegamento diretto verso il servizio WhatsApp (<code>wa.me</code>) gestito esternamente. LidoPass non intercetta né conserva il contenuto delle comunicazioni.</p>
+
+            <h3>5. Diritti dell'Interessato (Artt. 15–22 GDPR)</h3>
+            <ul>
+              <li>L'utente può modificare o eliminare in qualsiasi momento tutti i dati salvati sul dispositivo.</li>
+              <li>I gestori aggiornano autonomamente disponibilità e avvisi tramite PIN personale di sicurezza.</li>
+            </ul>
+          </div>
+
+          <div style="margin-top: 16px; padding-top: 14px; border-top: 1px solid var(--border);">
+            <button type="button" class="btn-danger" id="gdpr-wipe-btn" style="width: 100%;">Elimina Tutti i Dati Locali dal Dispositivo</button>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- Fixed Bottom Tab Bar (Clean 1.5px stroke SVG Icons) -->
+  <nav class="bottom-nav" aria-label="Navigazione principale">
+    <div class="bottom-nav-inner">
+      <button type="button" class="tab-btn active" data-tab="esplora" aria-current="page">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <circle cx="12" cy="12" r="9.5"/>
+          <polygon points="15.5 8.5 13.5 13.5 8.5 15.5 10.5 10.5 15.5 8.5"/>
+        </svg>
+        <span>Esplora</span>
+      </button>
+
+      <button type="button" class="tab-btn" data-tab="registra">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <rect x="3.5" y="3.5" width="17" height="17" rx="4"/>
+          <line x1="12" y1="8.5" x2="12" y2="15.5"/>
+          <line x1="8.5" y1="12" x2="15.5" y2="12"/>
+        </svg>
+        <span>Registra Struttura</span>
+      </button>
+
+      <button type="button" class="tab-btn" data-tab="gestori">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <line x1="4" y1="7" x2="20" y2="7"/>
+          <line x1="4" y1="12" x2="20" y2="12"/>
+          <line x1="4" y1="17" x2="20" y2="17"/>
+          <circle cx="9" cy="7" r="2" fill="#FFFFFF"/>
+          <circle cx="15" cy="12" r="2" fill="#FFFFFF"/>
+          <circle cx="10" cy="17" r="2" fill="#FFFFFF"/>
+        </svg>
+        <span>Area Gestori</span>
+      </button>
+
+      <button type="button" class="tab-btn" data-tab="profilo">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <path d="M12 3l7 3.5v5.5c0 4.5-3 8.3-7 9.5-4-1.2-7-5-7-9.5V6.5L12 3z"/>
+          <circle cx="12" cy="10.5" r="2.2"/>
+          <path d="M8.5 16.5c.8-1.6 2-2.3 3.5-2.3s2.7.7 3.5 2.3"/>
+        </svg>
+        <span>Profilo &amp; Privacy</span>
+      </button>
+    </div>
+  </nav>
+
+  <!-- Install PWA Modal -->
+  <div id="install-modal" class="modal-backdrop" role="dialog" aria-modal="true" aria-labelledby="install-modal-title">
+    <div class="modal-sheet">
+      <div class="sheet-handle"></div>
+      <div style="display: flex; align-items: center; justify-content: space-between; gap: 12px;">
+        <h2 id="install-modal-title" style="margin: 0; font-size: 1.14rem;">Installa LidoPass su Dispositivo</h2>
+        <button type="button" id="install-modal-close" class="btn-icon-glass" aria-label="Chiudi">
+          <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M18 6 6 18M6 6l12 12"/>
+          </svg>
+        </button>
+      </div>
+      <p style="margin: 8px 0 0 0; font-size: 0.86rem; color: var(--slate);">Aggiungi l'applicazione web alla schermata Home per accesso immediato in modalità nativa.</p>
+
+      <div id="android-native-install-wrap" style="display: none; margin-top: 14px;">
+        <button type="button" id="trigger-native-install" class="btn-primary" style="width: 100%;">Installa Applicazione Ora</button>
+      </div>
+
+      <div class="install-steps">
+        <div class="install-step">
+          <strong>iPhone e iPad (Safari)</strong>
+          1. Tocca l'icona Condividi nella barra inferiore del browser.<br />
+          2. Scorri le opzioni e seleziona "Aggiungi a schermata Home".
+        </div>
+        <div class="install-step">
+          <strong>Android (Chrome / Edge)</strong>
+          1. Tocca il menu opzioni in alto a destra nel browser.<br />
+          2. Seleziona "Installa app" oppure "Aggiungi a schermata Home".
+        </div>
+      </div>
+
+      <button type="button" id="install-modal-done" class="btn-secondary" style="width: 100%;">Chiudi</button>
+    </div>
+  </div>
+
+  <!-- Toast -->
+  <div id="app-toast" class="toast" role="status" aria-live="polite"></div>
+
+  <script>
+    (function () {
+      'use strict';
+
+      /* ===========================================================
+         1. PWA ICON SYNTHESIS & MANIFEST
+         =========================================================== */
+      function renderAppIconPng(size, maskable) {
+        const c = document.createElement('canvas');
+        c.width = size;
+        c.height = size;
+        const ctx = c.getContext('2d');
+
+        const grad = ctx.createLinearGradient(0, 0, size, size);
+        grad.addColorStop(0, '#0B132B');
+        grad.addColorStop(1, '#0284C7');
+
+        if (maskable) {
+          ctx.fillStyle = grad;
+          ctx.fillRect(0, 0, size, size);
+        } else {
+          const r = size * 0.22;
+          ctx.beginPath();
+          ctx.moveTo(r, 0);
+          ctx.lineTo(size - r, 0);
+          ctx.quadraticCurveTo(size, 0, size, r);
+          ctx.lineTo(size, size - r);
+          ctx.quadraticCurveTo(size, size, size - r, size);
+          ctx.lineTo(r, size);
+          ctx.quadraticCurveTo(0, size, 0, size - r);
+          ctx.lineTo(0, r);
+          ctx.quadraticCurveTo(0, 0, r, 0);
+          ctx.closePath();
+          ctx.fillStyle = grad;
+          ctx.fill();
+        }
+
+        const pad = maskable ? size * 0.16 : size * 0.08;
+        const inner = size - pad * 2;
+        const ox = pad;
+        const oy = pad;
+
+        // Champagne Gold Sun Ring
+        ctx.strokeStyle = '#C59B27';
+        ctx.lineWidth = Math.max(2, inner * 0.055);
+        ctx.beginPath();
+        ctx.arc(ox + inner * 0.72, oy + inner * 0.28, inner * 0.11, 0, Math.PI * 2);
+        ctx.stroke();
+
+        // Ocean Bright Wave
+        ctx.strokeStyle = '#0EA5E9';
+        ctx.lineCap = 'round';
+        ctx.lineWidth = Math.max(3, inner * 0.075);
+        ctx.beginPath();
+        ctx.moveTo(ox + inner * 0.14, oy + inner * 0.56);
+        ctx.bezierCurveTo(
+          ox + inner * 0.30, oy + inner * 0.40,
+          ox + inner * 0.44, oy + inner * 0.40,
+          ox + inner * 0.54, oy + inner * 0.56
+        );
+        ctx.bezierCurveTo(
+          ox + inner * 0.66, oy + inner * 0.72,
+          ox + inner * 0.78, oy + inner * 0.72,
+          ox + inner * 0.88, oy + inner * 0.54
+        );
+        ctx.stroke();
+
+        // Pearl White Wave
+        ctx.strokeStyle = '#FFFFFF';
+        ctx.lineWidth = Math.max(2.5, inner * 0.06);
+        ctx.beginPath();
+        ctx.moveTo(ox + inner * 0.14, oy + inner * 0.74);
+        ctx.bezierCurveTo(
+          ox + inner * 0.30, oy + inner * 0.60,
+          ox + inner * 0.44, oy + inner * 0.60,
+          ox + inner * 0.54, oy + inner * 0.74
+        );
+        ctx.bezierCurveTo(
+          ox + inner * 0.66, oy + inner * 0.86,
+          ox + inner * 0.78, oy + inner * 0.86,
+          ox + inner * 0.88, oy + inner * 0.72
+        );
+        ctx.stroke();
+
+        return c.toDataURL('image/png');
+      }
+
+      function initPWAMetadata() {
+        try {
+          const icon180 = renderAppIconPng(180, false);
+          const icon192 = renderAppIconPng(192, false);
+          const icon512 = renderAppIconPng(512, false);
+          const iconMask512 = renderAppIconPng(512, true);
+
+          const appleLink = document.getElementById('apple-touch-icon');
+          if (appleLink) appleLink.href = icon180;
+
+          const startUrl = window.location.href.split('?')[0];
+          const manifest = {
+            id: window.location.pathname || '/',
+            name: 'LidoPass — Coastal Booking Network',
+            short_name: 'LidoPass',
+            description: 'Disponibilità in tempo reale, formule contrattuali, impianti sportivi ed eventi sulla Costa Adriatica.',
+            start_url: startUrl,
+            scope: './',
+            display: 'standalone',
+            orientation: 'portrait-primary',
+            background_color: '#F6F8FB',
+            theme_color: '#0284C7',
+            icons: [
+              { src: icon192, sizes: '192x192', type: 'image/png', purpose: 'any' },
+              { src: icon512, sizes: '512x512', type: 'image/png', purpose: 'any' },
+              { src: iconMask512, sizes: '512x512', type: 'image/png', purpose: 'maskable' }
+            ]
+          };
+
+          const blob = new Blob([JSON.stringify(manifest)], { type: 'application/manifest+json' });
+          const manifestLink = document.getElementById('pwa-manifest');
+          if (manifestLink) manifestLink.href = URL.createObjectURL(blob);
+        } catch (err) {}
+      }
+
+      /* ===========================================================
+         2. QR CODE SERVICE (HTTPS://QRSERVER.COM / API.QRSERVER.COM)
+         =========================================================== */
+      const QR = (function () {
+        function buildQrUrl(text, size) {
+          const px = size || 300;
+          return (
+            'https://api.qrserver.com/v1/create-qr-code/?size=' +
+            px + 'x' + px +
+            '&margin=10&color=0B132B&bgcolor=FFFFFF&ecc=M&data=' +
+            encodeURIComponent(text)
+          );
+        }
+
+        function renderToImg(imgEl, text, pxSize) {
+          if (!imgEl) return;
+          const qrSrc = buildQrUrl(text, pxSize || 300);
+          imgEl.crossOrigin = 'anonymous';
+          imgEl.referrerPolicy = 'no-referrer';
+          imgEl.src = qrSrc;
+          imgEl.onerror = function () {
+            showToast('Connessione necessaria per caricare il QR Code.');
+          };
+        }
+
+        function loadQrImageForCanvas(url, size) {
+          return new Promise((resolve, reject) => {
+            const img = new Image();
+            img.crossOrigin = 'anonymous';
+            img.referrerPolicy = 'no-referrer';
+            img.onload = () => resolve(img);
+            img.onerror = () => reject(new Error('QR image load failed'));
+            img.src = buildQrUrl(url, size);
+          });
+        }
+
+        async function downloadPosterPng(lido, url) {
+          try {
+            showToast('Generazione locandina PNG in corso...');
+            const qrImg = await loadQrImageForCanvas(url, 400);
+
+            const poster = document.createElement('canvas');
+            poster.width = 760;
+            poster.height = 960;
+            const ctx = poster.getContext('2d');
+
+            ctx.fillStyle = '#F6F8FB';
+            ctx.fillRect(0, 0, 760, 960);
+
+            const grad = ctx.createLinearGradient(0, 0, 760, 180);
+            grad.addColorStop(0, '#0B132B');
+            grad.addColorStop(1, '#0284C7');
+            ctx.fillStyle = grad;
+            ctx.fillRect(0, 0, 760, 180);
+
+            // Minimal gold accent ring
+            ctx.strokeStyle = '#C59B27';
+            ctx.lineWidth = 4;
+            ctx.beginPath();
+            ctx.arc(680, 66, 18, 0, Math.PI * 2);
+            ctx.stroke();
+
+            ctx.fillStyle = '#FFFFFF';
+            ctx.font = 'bold 40px sans-serif';
+            ctx.fillText('LidoPass', 52, 82);
+            ctx.font = '20px sans-serif';
+            ctx.fillStyle = 'rgba(255,255,255,0.84)';
+            ctx.fillText('Coastal Booking & Live Availability Network', 52, 122);
+
+            ctx.fillStyle = '#0B132B';
+            ctx.textAlign = 'center';
+            ctx.font = 'bold 34px sans-serif';
+            ctx.fillText(lido.name.slice(0, 34), 380, 250);
+            ctx.fillStyle = '#475569';
+            ctx.font = '22px sans-serif';
+            ctx.fillText(lido.city + ' - ' + lido.address, 380, 290);
+
+            ctx.fillStyle = '#FFFFFF';
+            ctx.fillRect(160, 330, 440, 440);
+            ctx.strokeStyle = 'rgba(15,23,42,0.12)';
+            ctx.lineWidth = 2;
+            ctx.strokeRect(160, 330, 440, 440);
+            ctx.drawImage(qrImg, 180, 350, 400, 400);
+
+            ctx.fillStyle = '#0284C7';
+            ctx.font = 'bold 23px sans-serif';
+            ctx.fillText('Scansiona per verificare disponibilità live,', 380, 825);
+            ctx.fillText('campi sportivi ed eventi della struttura', 380, 860);
+
+            ctx.fillStyle = '#64748B';
+            ctx.font = '18px sans-serif';
+            ctx.fillText('Inquadra il codice con la fotocamera dello smartphone', 380, 908);
+
+            const a = document.createElement('a');
+            a.download = 'LidoPass-QR-' + lido.name.toLowerCase().replace(/[^a-z0-9]+/g, '-') + '.png';
+            a.href = poster.toDataURL('image/png');
+            a.click();
+            showToast('Locandina QR scaricata.');
+          } catch (err) {
+            showToast('Impossibile scaricare la locandina: verifica la connessione.');
+          }
+        }
+
+        return { renderToImg, downloadPosterPng };
+      })();
+
+      /* ===========================================================
+         3. STATE, DEMO DATA & STORAGE
+         =========================================================== */
+      const STORAGE_KEYS = {
+        LIDI: 'lidopass_luxury_lidi_v2',
+        FAVS: 'lidopass_luxury_favs_v2',
+        PROFILE: 'lidopass_luxury_profile_v2',
+        CLOUD: 'lidopass_luxury_cloud_v2'
+      };
+
+      const DEMO_LIDI = [
+        {
+          id: 'lido-demo-adriatico',
+          name: 'Lido Demo · Costa Adriatica (Esempio Dimostrativo)',
+          city: 'Fano',
+          address: 'Lungomare Sassonia 18',
+          piva: '01234567890',
+          whatsapp: '393331234567',
+          formula: 'Stagionali + Giornalieri',
+          status: 'available',
+          services: [
+            'Ombrelloni & Gazebo',
+            'Campi Beach Volley / Tennis',
+            'Ristorante & Lounge Bar',
+            'Accessibilità Completa'
+          ],
+          promo: 'Sunset Lounge dalle 18:30 con musica acustica vista mare e campi da beach volley disponibili.',
+          pin: '1234',
+          updatedAt: 'Oggi, 10:30'
+        },
+        {
+          id: 'bagni-onda-azzurra',
+          name: 'Bagni Onda Azzurra',
+          city: 'Senigallia',
+          address: 'Lungomare Alighieri 64',
+          piva: '02468135790',
+          whatsapp: '393399876543',
+          formula: 'Prevalentemente Stagionali/Mensili',
+          status: 'limited',
+          services: [
+            'Ombrelloni & Gazebo',
+            'Piscina & Idromassaggio',
+            'Accessibilità Completa'
+          ],
+          promo: 'Ultimi quattro gazebo disponibili per la fascia settimanale di alta stagione.',
+          pin: '2026',
+          updatedAt: 'Oggi, 09:45'
+        },
+        {
+          id: 'vela-doro-beach',
+          name: "Vela d'Oro Beach & Sport Club",
+          city: 'Marotta',
+          address: 'Viale Faà di Bruno 12',
+          piva: '09876543210',
+          whatsapp: '393471122334',
+          formula: 'Giornalieri, Sport & Eventi',
+          status: 'available',
+          services: [
+            'Ombrelloni & Gazebo',
+            'Campi Beach Volley / Tennis',
+            'Ristorante & Lounge Bar'
+          ],
+          promo: 'Torneo Open Beach Volley alle 17:00 con accesso giornaliero attivo fino al tramonto.',
+          pin: '4321',
+          updatedAt: 'Oggi, 11:10'
+        },
+        {
+          id: 'baia-del-sole-pesaro',
+          name: 'Stabilimento Baia del Sole',
+          city: 'Pesaro',
+          address: 'Viale Trieste 105',
+          piva: '01122334455',
+          whatsapp: '393405566778',
+          formula: 'Stagionali + Giornalieri',
+          status: 'full',
+          services: [
+            'Ombrelloni & Gazebo',
+            'Piscina & Idromassaggio',
+            'Ristorante & Lounge Bar',
+            'Accessibilità Completa'
+          ],
+          promo: 'Area spiaggia al completo per la giornata odierna; ristorante vista mare aperto.',
+          pin: '5555',
+          updatedAt: 'Oggi, 11:25'
+        }
+      ];
+
+      let state = {
+        lidi: [],
+        favorites: [],
+        profile: { name: '', city: '', email: '' },
+        cloud: { binId: '', masterKey: '' },
+        activeTab: 'esplora',
+        filter: 'all',
+        search: '',
+        spotlightId: null,
+        managerId: null,
+        deferredPrompt: null,
+        isStandalone: false
+      };
+
+      function nowTimeLabel() {
+        const d = new Date();
+        return 'Oggi, ' + String(d.getHours()).padStart(2, '0') + ':' + String(d.getMinutes()).padStart(2, '0');
+      }
+
+      function showToast(msg) {
+        const t = document.getElementById('app-toast');
+        t.textContent = msg;
+        t.classList.add('visible');
+        clearTimeout(t._timer);
+        t._timer = setTimeout(() => t.classList.remove('visible'), 2800);
+      }
+
+      function setCloudStatusUI(mode, labelText) {
+        const dot = document.getElementById('header-cloud-dot');
+        const txt = document.getElementById('header-cloud-text');
+        const modeLbl = document.getElementById('cloud-mode-label');
+        dot.className = 'status-dot ' + (mode === 'cloud' ? 'dot-cloud' : 'dot-local');
+        txt.textContent = labelText;
+        modeLbl.textContent = labelText;
+      }
+
+      function loadLocalState() {
+        try {
+          const saved = JSON.parse(localStorage.getItem(STORAGE_KEYS.LIDI) || 'null');
+          state.lidi = Array.isArray(saved) && saved.length > 0 ? saved : structuredClone(DEMO_LIDI);
+        } catch {
+          state.lidi = structuredClone(DEMO_LIDI);
+        }
+
+        try {
+          const favs = JSON.parse(localStorage.getItem(STORAGE_KEYS.FAVS) || '[]');
+          state.favorites = Array.isArray(favs) ? favs : [];
+        } catch {
+          state.favorites = [];
+        }
+
+        try {
+          const prof = JSON.parse(localStorage.getItem(STORAGE_KEYS.PROFILE) || 'null');
+          if (prof) state.profile = { name: prof.name || '', city: prof.city || '', email: prof.email || '' };
+        } catch {}
+
+        try {
+          const cloud = JSON.parse(localStorage.getItem(STORAGE_KEYS.CLOUD) || 'null');
+          if (cloud) state.cloud = { binId: (cloud.binId || '').trim(), masterKey: (cloud.masterKey || '').trim() };
+        } catch {}
+      }
+
+      function saveLocalLidi() {
+        localStorage.setItem(STORAGE_KEYS.LIDI, JSON.stringify(state.lidi));
+      }
+
+      /* ===========================================================
+         4. JSONBIN.IO CLOUD SYNC
+         =========================================================== */
+      async function fetchCloudLidi(showFeedback) {
+        if (!state.cloud.binId) {
+          setCloudStatusUI('local', 'Archivio Locale · Demo');
+          return false;
+        }
+
+        try {
+          const headers = {};
+          if (state.cloud.masterKey) headers['X-Master-Key'] = state.cloud.masterKey;
+
+          const res = await fetch('https://api.jsonbin.io/v3/b/' + encodeURIComponent(state.cloud.binId) + '/latest', {
+            method: 'GET',
+            headers
+          });
+          if (!res.ok) throw new Error('HTTP ' + res.status);
+          const json = await res.json();
+          const record = json && json.record ? json.record : json;
+          if (record && Array.isArray(record.lidi) && record.lidi.length > 0) {
+            state.lidi = record.lidi;
+            saveLocalLidi();
+            setCloudStatusUI('cloud', 'Cloud JSONBin Live');
+            renderAll();
+            if (showFeedback) showToast('Dati sincronizzati dal cloud.');
+            return true;
+          } else {
+            if (!state.lidi.length) state.lidi = structuredClone(DEMO_LIDI);
+            setCloudStatusUI('local', 'Fallback Demo Attivo');
+            renderAll();
+            return false;
+          }
+        } catch (err) {
+          setCloudStatusUI('local', 'Modalità Offline Locale');
+          if (showFeedback) showToast('Rete non raggiungibile: attivo archivio locale.');
+          return false;
+        }
+      }
+
+      async function pushCloudLidi() {
+        saveLocalLidi();
+        if (!state.cloud.binId || !state.cloud.masterKey) {
+          return { synced: false };
+        }
+        try {
+          const res = await fetch('https://api.jsonbin.io/v3/b/' + encodeURIComponent(state.cloud.binId), {
+            method: 'PUT',
+            headers: {
+              'Content-Type': 'application/json',
+              'X-Master-Key': state.cloud.masterKey
+            },
+            body: JSON.stringify({ lidi: state.lidi })
+          });
+          if (!res.ok) throw new Error('HTTP ' + res.status);
+          setCloudStatusUI('cloud', 'Cloud JSONBin Live');
+          return { synced: true };
+        } catch {
+          return { synced: false };
+        }
+      }
+
+      /* ===========================================================
+         5. 3D TILT & DYNAMIC SPECULAR LIGHT ENGINE
+         =========================================================== */
+      function bindCard3DTilt() {
+        const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+        if (reduced) return;
+
+        const cards = document.querySelectorAll('.lido-card');
+        cards.forEach((card) => {
+          const applyTilt = (clientX, clientY) => {
+            const rect = card.getBoundingClientRect();
+            const x = clientX - rect.left;
+            const y = clientY - rect.top;
+            const px = (x / rect.width) - 0.5;
+            const py = (y / rect.height) - 0.5;
+            const rotY = (px * 7).toFixed(2);
+            const rotX = (-py * 7).toFixed(2);
+
+            card.style.setProperty('--mx', ((x / rect.width) * 100).toFixed(1) + '%');
+            card.style.setProperty('--my', ((y / rect.height) * 100).toFixed(1) + '%');
+            card.style.transform = `perspective(1200px) rotateX(${rotX}deg) rotateY(${rotY}deg) translateZ(6px)`;
+            card.classList.add('tilting');
+          };
+
+          const resetTilt = () => {
+            card.style.transform = 'perspective(1200px) rotateX(0deg) rotateY(0deg) translateZ(0px)';
+            card.classList.remove('tilting');
+          };
+
+          card.addEventListener('pointermove', (e) => {
+            if (e.pointerType === 'mouse') applyTilt(e.clientX, e.clientY);
+          });
+          card.addEventListener('pointerleave', resetTilt);
+          card.addEventListener('touchmove', (e) => {
+            if (e.touches && e.touches[0]) {
+              applyTilt(e.touches[0].clientX, e.touches[0].clientY);
+            }
+          }, { passive: true });
+          card.addEventListener('touchend', resetTilt, { passive: true });
+        });
+      }
+
+      /* ===========================================================
+         6. HELPERS & RENDERERS (ZERO EMOJI)
+         =========================================================== */
+      function escapeHtml(str) {
+        return String(str || '')
+          .replace(/&/g, '&amp;')
+          .replace(/</g, '&lt;')
+          .replace(/>/g, '&gt;')
+          .replace(/"/g, '&quot;')
+          .replace(/'/g, '&#39;');
+      }
+
+      function statusMeta(status) {
+        if (status === 'limited') {
+          return { pillCls: 'status-limited', dotCls: 'dot-limited', label: 'Ultimi Posti' };
+        }
+        if (status === 'full') {
+          return { pillCls: 'status-full', dotCls: 'dot-full', label: 'Completo Oggi' };
+        }
+        return { pillCls: 'status-available', dotCls: 'dot-available', label: 'Posti & Campi Liberi' };
+      }
+
+      function matchesFilter(lido, filter) {
+        if (filter === 'all') return true;
+        if (filter === 'daily') {
+          return lido.formula === 'Stagionali + Giornalieri' || lido.formula === 'Giornalieri, Sport & Eventi';
+        }
+        if (filter === 'seasonal') {
+          return lido.formula === 'Stagionali + Giornalieri' || lido.formula === 'Prevalentemente Stagionali/Mensili';
+        }
+        if (filter === 'sport') {
+          const hasSport = (lido.services || []).some(s =>
+            s.includes('Volley') || s.includes('Bar') || s.includes('Lounge')
+          );
+          return lido.formula === 'Giornalieri, Sport & Eventi' || hasSport || Boolean(lido.promo);
+        }
+        return true;
+      }
+
+      function buildWhatsAppUrl(lido) {
+        const cleanPhone = String(lido.whatsapp || '').replace(/\D/g, '');
+        const msg = encodeURIComponent(
+          `Buongiorno ${lido.name} (${lido.city}), vi contatto tramite LidoPass per verificare la disponibilità.`
+        );
+        return `https://wa.me/${cleanPhone}?text=${msg}`;
+      }
+
+      function getLidoShareUrl(lidoId) {
+        const base = window.location.href.split('?')[0].split('#')[0];
+        return base + '?lido=' + encodeURIComponent(lidoId);
+      }
+
+      function renderExplore() {
+        const grid = document.getElementById('lidi-grid');
+        const countEl = document.getElementById('explore-count');
+        const q = state.search.trim().toLowerCase();
+
+        const spotlightEl = document.getElementById('qr-spotlight');
+        const spotlightName = document.getElementById('qr-spotlight-name');
+
+        const filtered = state.lidi.filter((l) => {
+          if (state.spotlightId) return l.id === state.spotlightId;
+          const matchQ =
+            !q ||
+            l.name.toLowerCase().includes(q) ||
+            l.city.toLowerCase().includes(q) ||
+            l.address.toLowerCase().includes(q);
+          return matchQ && matchesFilter(l, state.filter);
+        });
+
+        if (state.spotlightId && filtered.length > 0) {
+          spotlightEl.classList.add('visible');
+          spotlightName.textContent = filtered[0].name + ' — ' + filtered[0].city;
+        } else {
+          spotlightEl.classList.remove('visible');
+        }
+
+        countEl.textContent = filtered.length === 1 ? '1 struttura rilevata' : filtered.length + ' strutture rilevate';
+
+        if (filtered.length === 0) {
+          grid.innerHTML = `
+            <div class="empty-state">
+              <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" style="color: var(--muted); margin-bottom: 10px;">
+                <circle cx="11" cy="11" r="7.5"/>
+                <path d="m20 20-3.8-3.8"/>
+              </svg>
+              <strong style="display: block; font-size: 1rem; color: var(--night); margin-bottom: 4px;">Nessuna struttura trovata</strong>
+              <span style="font-size: 0.88rem;">Modifica i parametri di ricerca o seleziona un filtro differente.</span>
+            </div>
+          `;
+          return;
+        }
+
+        grid.innerHTML = filtered.map((lido) => {
+          const st = statusMeta(lido.status);
+          const isFav = state.favorites.includes(lido.id);
+          const servicesHtml = (lido.services && lido.services.length > 0)
+            ? lido.services.map(s => `<span class="service-chip">${escapeHtml(s)}</span>`).join('')
+            : '<span class="service-chip">Servizi balneari standard</span>';
+
+          const promoHtml = lido.promo
+            ? `
+              <div class="lido-promo">
+                <div class="lido-promo-head">
+                  <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                    <circle cx="12" cy="12" r="4"/>
+                    <path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41"/>
+                  </svg>
+                  <span>Aggiornamento / Evento del Giorno</span>
+                </div>
+                <div>${escapeHtml(lido.promo)}</div>
+              </div>
+            `
+            : '';
+
+          return `
+            <article class="lido-card">
+              <div class="lido-card-inner-3d">
+                <div class="lido-card-top">
+                  <span class="status-pill ${st.pillCls}">
+                    <span class="status-dot ${st.dotCls}"></span>
+                    <span>${st.label}</span>
+                  </span>
+
+                  <button type="button" class="fav-btn ${isFav ? 'is-fav' : ''}" data-fav-id="${escapeHtml(lido.id)}" aria-label="${isFav ? 'Rimuovi dai preferiti' : 'Salva nei preferiti'}">
+                    <svg width="19" height="19" viewBox="0 0 24 24" fill="${isFav ? 'currentColor' : 'none'}" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                      <path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"/>
+                    </svg>
+                  </button>
+                </div>
+
+                <h3 class="lido-title">${escapeHtml(lido.name)}</h3>
+                <p class="lido-location">
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0; color: var(--ocean);" aria-hidden="true">
+                    <path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"/>
+                    <circle cx="12" cy="10" r="3"/>
+                  </svg>
+                  <span>${escapeHtml(lido.city)} · ${escapeHtml(lido.address)}</span>
+                </p>
+
+                <div class="lido-formula-line">
+                  <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                    <rect x="3" y="4" width="18" height="18" rx="2"/>
+                    <line x1="16" y1="2" x2="16" y2="6"/>
+                    <line x1="8" y1="2" x2="8" y2="6"/>
+                    <line x1="3" y1="10" x2="21" y2="10"/>
+                  </svg>
+                  <span>${escapeHtml(lido.formula)}</span>
+                </div>
+
+                <div class="services-pills">${servicesHtml}</div>
+              </div>
+
+              <div class="lido-card-foot">
+                ${promoHtml}
+                <div class="lido-updated">
+                  <span class="tabular-nums">Ultimo aggiornamento: ${escapeHtml(lido.updatedAt || 'Oggi')}</span>
+                </div>
+                <a href="${buildWhatsAppUrl(lido)}" target="_blank" rel="noopener noreferrer" class="btn-whatsapp">
+                  <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                    <path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"/>
+                  </svg>
+                  <span>Contatta Struttura su WhatsApp</span>
+                </a>
+              </div>
+            </article>
+          `;
+        }).join('');
+
+        bindCard3DTilt();
+      }
+
+      function renderManagerSelect() {
+        const sel = document.getElementById('mgr-lido-select');
+        const currentVal = sel.value;
+        sel.innerHTML = state.lidi.map(
+          (l) => `<option value="${escapeHtml(l.id)}">${escapeHtml(l.name)} (${escapeHtml(l.city)})</option>`
+        ).join('');
+        if (currentVal && state.lidi.some(l => l.id === currentVal)) {
+          sel.value = currentVal;
+        }
+      }
+
+      function renderManagerDashboard() {
+        const loginCard = document.getElementById('manager-login-card');
+        const dash = document.getElementById('manager-dashboard');
+        const lido = state.lidi.find((l) => l.id === state.managerId);
+
+        if (!lido) {
+          loginCard.style.display = 'block';
+          dash.style.display = 'none';
+          return;
+        }
+
+        loginCard.style.display = 'none';
+        dash.style.display = 'block';
+
+        document.getElementById('mgr-active-name').textContent = lido.name;
+        document.getElementById('mgr-active-meta').textContent = `${lido.city} · ${lido.address} · P.IVA ${lido.piva}`;
+        document.getElementById('mgr-last-updated').textContent = 'Aggiornato: ' + (lido.updatedAt || 'Adesso');
+        document.getElementById('mgr-promo-input').value = lido.promo || '';
+
+        ['available', 'limited', 'full'].forEach((s) => {
+          const btn = document.getElementById('btn-status-' + s);
+          btn.classList.remove('selected-available', 'selected-limited', 'selected-full');
+          if (lido.status === s) btn.classList.add('selected-' + s);
+        });
+
+        const shareUrl = getLidoShareUrl(lido.id);
+        const qrImgEl = document.getElementById('mgr-qr-img');
+        QR.renderToImg(qrImgEl, shareUrl, 240);
+        document.getElementById('mgr-qr-caption').textContent =
+          `Inquadra per consultare disponibilità live, servizi ed eventi di ${lido.name}`;
+        document.getElementById('mgr-qr-url').textContent = shareUrl;
+      }
+
+      function renderProfile() {
+        document.getElementById('prof-name').value = state.profile.name || '';
+        document.getElementById('prof-city').value = state.profile.city || '';
+        document.getElementById('prof-email').value = state.profile.email || '';
+
+        const displayName = state.profile.name || 'Ospite Costa Adriatica';
+        document.getElementById('profile-greeting').textContent = displayName;
+        document.getElementById('profile-sub').textContent =
+          (state.profile.city ? state.profile.city + ' · ' : '') +
+          (state.profile.email ? state.profile.email : 'Archiviazione locale esclusiva su dispositivo');
+
+        const initials = displayName
+          .split(/\s+/)
+          .filter(Boolean)
+          .slice(0, 2)
+          .map(w => w[0].toUpperCase())
+          .join('') || 'LP';
+        document.getElementById('profile-avatar').textContent = initials;
+
+        const favList = document.getElementById('favorites-list');
+        const favLidi = state.lidi.filter((l) => state.favorites.includes(l.id));
+
+        if (favLidi.length === 0) {
+          favList.innerHTML = `<p style="margin: 0; font-size: 0.86rem; color: var(--muted);">Nessuna struttura salvata nei preferiti. Seleziona l'icona cuore nella scheda Esplora per aggiungerla qui.</p>`;
+          return;
+        }
+
+        favList.innerHTML = favLidi.map((l) => {
+          const st = statusMeta(l.status);
+          return `
+            <div style="border: 1px solid var(--border); border-radius: var(--radius-md); padding: 13px; background: rgba(246, 248, 251, 0.7); display: flex; flex-direction: column; gap: 9px;">
+              <div style="display: flex; align-items: center; justify-content: space-between; gap: 8px;">
+                <strong style="font-size: 0.94rem; color: var(--night);">${escapeHtml(l.name)}</strong>
+                <button type="button" class="btn-secondary" data-remove-fav="${escapeHtml(l.id)}" style="min-height: 36px; padding: 4px 10px; font-size: 0.76rem;">Rimuovi</button>
+              </div>
+              <div style="display: flex; align-items: center; justify-content: space-between; gap: 8px; flex-wrap: wrap;">
+                <span style="font-size: 0.81rem; color: var(--slate);">${escapeHtml(l.city)} · ${escapeHtml(l.address)}</span>
+                <span class="status-pill ${st.pillCls}">
+                  <span class="status-dot ${st.dotCls}"></span>
+                  <span>${st.label}</span>
+                </span>
+              </div>
+              <a href="${buildWhatsAppUrl(l)}" target="_blank" rel="noopener noreferrer" class="btn-whatsapp" style="min-height: 40px; font-size: 0.82rem;">Contatta su WhatsApp</a>
+            </div>
+          `;
+        }).join('');
+      }
+
+      function renderAdminPanel() {
+        document.getElementById('admin-bin-id').value = state.cloud.binId || '';
+        document.getElementById('admin-master-key').value = state.cloud.masterKey || '';
+        const status = document.getElementById('admin-cloud-status');
+        if (state.cloud.binId && state.cloud.masterKey) {
+          status.textContent = 'Stato sistema: sincronizzazione Cloud JSONBin attiva (Bin ' + state.cloud.binId + ').';
+        } else {
+          status.textContent = 'Stato sistema: modalità locale attiva (nessuna chiave cloud configurata).';
+        }
+      }
+
+      function renderAll() {
+        renderExplore();
+        renderManagerSelect();
+        renderManagerDashboard();
+        renderProfile();
+        renderAdminPanel();
+      }
+
+      /* ===========================================================
+         7. NAVIGATION & EVENTS
+         =========================================================== */
+      function switchTab(tabName) {
+        state.activeTab = tabName;
+        document.querySelectorAll('.tab-panel').forEach((p) => {
+          const isMatch = p.id === 'tab-' + tabName;
+          p.classList.remove('active');
+          if (isMatch) {
+            void p.offsetWidth; // trigger clean 3D entrance transition
+            p.classList.add('active');
+          }
+        });
+        document.querySelectorAll('.tab-btn').forEach((b) => {
+          const active = b.dataset.tab === tabName;
+          b.classList.toggle('active', active);
+          b.setAttribute('aria-current', active ? 'page' : 'false');
+        });
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      }
+
+      function setupEvents() {
+        document.querySelectorAll('.tab-btn').forEach((btn) => {
+          btn.addEventListener('click', () => switchTab(btn.dataset.tab));
+        });
+
+        document.getElementById('brand-home').addEventListener('click', (e) => {
+          e.preventDefault();
+          state.spotlightId = null;
+          switchTab('esplora');
+          renderExplore();
+        });
+
+        const refreshBtn = document.getElementById('header-refresh-btn');
+        refreshBtn.addEventListener('click', async () => {
+          refreshBtn.classList.add('spinning');
+          setTimeout(() => refreshBtn.classList.remove('spinning'), 700);
+          const ok = await fetchCloudLidi(true);
+          if (!ok && !state.cloud.binId) {
+            renderExplore();
+            showToast('Elenco strutture aggiornato.');
+          }
+        });
+
+        // Search
+        const searchInput = document.getElementById('explore-search');
+        const searchClear = document.getElementById('explore-search-clear');
+        searchInput.addEventListener('input', () => {
+          state.search = searchInput.value;
+          searchClear.classList.toggle('visible', state.search.length > 0);
+          renderExplore();
+        });
+        searchClear.addEventListener('click', () => {
+          state.search = '';
+          searchInput.value = '';
+          searchClear.classList.remove('visible');
+          renderExplore();
+          searchInput.focus();
+        });
+
+        // Filter Pills
+        document.querySelectorAll('.filter-pill').forEach((pill) => {
+          pill.addEventListener('click', () => {
+            state.filter = pill.dataset.filter;
+            document.querySelectorAll('.filter-pill').forEach((p) => {
+              const active = p === pill;
+              p.classList.toggle('active', active);
+              p.setAttribute('aria-selected', active ? 'true' : 'false');
+            });
+            renderExplore();
+          });
+        });
+
+        document.getElementById('qr-spotlight-reset').addEventListener('click', () => {
+          state.spotlightId = null;
+          if (window.history && window.history.replaceState) {
+            window.history.replaceState({}, '', window.location.pathname);
+          }
+          renderExplore();
+        });
+
+        // Favorites Delegation
+        document.getElementById('lidi-grid').addEventListener('click', (e) => {
+          const btn = e.target.closest('[data-fav-id]');
+          if (!btn) return;
+          const id = btn.dataset.favId;
+          const idx = state.favorites.indexOf(id);
+          if (idx >= 0) {
+            state.favorites.splice(idx, 1);
+            showToast('Struttura rimossa dai preferiti.');
+          } else {
+            state.favorites.push(id);
+            showToast('Struttura salvata nei preferiti.');
+          }
+          localStorage.setItem(STORAGE_KEYS.FAVS, JSON.stringify(state.favorites));
+          renderExplore();
+          renderProfile();
+        });
+
+        document.getElementById('favorites-list').addEventListener('click', (e) => {
+          const btn = e.target.closest('[data-remove-fav]');
+          if (!btn) return;
+          const id = btn.dataset.removeFav;
+          state.favorites = state.favorites.filter((x) => x !== id);
+          localStorage.setItem(STORAGE_KEYS.FAVS, JSON.stringify(state.favorites));
+          renderExplore();
+          renderProfile();
+          showToast('Preferito rimosso.');
+        });
+
+        /* ---- TAB 2: REGISTRA STRUTTURA ---- */
+        const pivaInput = document.getElementById('reg-piva');
+        const pivaCounter = document.getElementById('reg-piva-counter');
+        pivaInput.addEventListener('input', () => {
+          pivaInput.value = pivaInput.value.replace(/\D/g, '').slice(0, 11);
+          pivaCounter.textContent = pivaInput.value.length + ' / 11 cifre numeriche';
+        });
+
+        const pinRegInput = document.getElementById('reg-pin');
+        pinRegInput.addEventListener('input', () => {
+          pinRegInput.value = pinRegInput.value.replace(/\D/g, '').slice(0, 4);
+        });
+
+        document.getElementById('reg-open-gdpr').addEventListener('click', (e) => {
+          e.preventDefault();
+          switchTab('profilo');
+        });
+
+        let lastRegisteredLido = null;
+
+        document.getElementById('register-lido-form').addEventListener('submit', async (e) => {
+          e.preventDefault();
+
+          const name = document.getElementById('reg-name').value.trim();
+          const city = document.getElementById('reg-city').value.trim();
+          const address = document.getElementById('reg-address').value.trim();
+          const piva = document.getElementById('reg-piva').value.replace(/\D/g, '');
+          const whatsappRaw = document.getElementById('reg-whatsapp').value.replace(/\D/g, '');
+          const formula = document.getElementById('reg-formula').value;
+          const pin = document.getElementById('reg-pin').value.replace(/\D/g, '');
+          const promo = document.getElementById('reg-promo').value.trim();
+          const gdprOk = document.getElementById('reg-gdpr').checked;
+          const services = Array.from(document.querySelectorAll('input[name="reg-service"]:checked')).map((el) => el.value);
+
+          const setErr = (id, show) => document.getElementById(id).classList.toggle('visible', show);
+          let valid = true;
+
+          setErr('err-reg-name', !name); if (!name) valid = false;
+          setErr('err-reg-city', !city); if (!city) valid = false;
+          setErr('err-reg-address', !address); if (!address) valid = false;
+          const pivaValid = /^\d{11}$/.test(piva);
+          setErr('err-reg-piva', !pivaValid); if (!pivaValid) valid = false;
+
+          const whatsapp = whatsappRaw.startsWith('39') ? whatsappRaw : (whatsappRaw.length >= 9 ? '39' + whatsappRaw : whatsappRaw);
+          const waValid = /^\d{10,15}$/.test(whatsapp);
+          setErr('err-reg-whatsapp', !waValid); if (!waValid) valid = false;
+
+          const pinValid = /^\d{4}$/.test(pin);
+          setErr('err-reg-pin', !pinValid); if (!pinValid) valid = false;
+
+          setErr('err-reg-gdpr', !gdprOk); if (!gdprOk) valid = false;
+
+          if (!valid) {
+            showToast('Verifica i campi obbligatori evidenziati.');
+            return;
+          }
+
+          const newLido = {
+            id: 'lido-' + Date.now().toString(36) + '-' + Math.random().toString(36).slice(2, 6),
+            name,
+            city,
+            address,
+            piva,
+            whatsapp,
+            formula,
+            status: 'available',
+            services,
+            promo,
+            pin,
+            updatedAt: nowTimeLabel()
+          };
+
+          state.lidi.unshift(newLido);
+          lastRegisteredLido = newLido;
+
+          const syncRes = await pushCloudLidi();
+          renderAll();
+
+          document.getElementById('reg-form-container').style.display = 'none';
+          document.getElementById('reg-success-container').style.display = 'block';
+          document.getElementById('reg-summary-name').textContent = newLido.name;
+          document.getElementById('reg-summary-loc').textContent = `${newLido.city} · ${newLido.address}`;
+          document.getElementById('reg-summary-pin').textContent = newLido.pin;
+          document.getElementById('reg-qr-caption').textContent = `Inquadra per consultare disponibilità live e servizi di ${newLido.name}`;
+
+          QR.renderToImg(document.getElementById('reg-qr-img'), getLidoShareUrl(newLido.id), 200);
+          showToast(syncRes.synced ? 'Struttura pubblicata sul cloud.' : 'Struttura pubblicata in locale.');
+        });
+
+        document.getElementById('reg-download-qr').addEventListener('click', () => {
+          if (lastRegisteredLido) {
+            QR.downloadPosterPng(lastRegisteredLido, getLidoShareUrl(lastRegisteredLido.id));
+          }
+        });
+
+        document.getElementById('reg-goto-explore').addEventListener('click', () => switchTab('esplora'));
+
+        document.getElementById('reg-goto-manager').addEventListener('click', () => {
+          if (lastRegisteredLido) {
+            state.managerId = lastRegisteredLido.id;
+            renderManagerSelect();
+            document.getElementById('mgr-lido-select').value = lastRegisteredLido.id;
+            renderManagerDashboard();
+          }
+          switchTab('gestori');
+        });
+
+        document.getElementById('reg-new-another').addEventListener('click', () => {
+          document.getElementById('register-lido-form').reset();
+          pivaCounter.textContent = '0 / 11 cifre numeriche';
+          document.getElementById('reg-success-container').style.display = 'none';
+          document.getElementById('reg-form-container').style.display = 'block';
+        });
+
+        /* ---- TAB 3: AREA GESTORI ---- */
+        const mgrPinInput = document.getElementById('mgr-pin-input');
+        mgrPinInput.addEventListener('input', () => {
+          mgrPinInput.value = mgrPinInput.value.replace(/\D/g, '').slice(0, 4);
+        });
+
+        document.getElementById('manager-login-form').addEventListener('submit', (e) => {
+          e.preventDefault();
+          const selectedId = document.getElementById('mgr-lido-select').value;
+          const pin = mgrPinInput.value.trim();
+          const lido = state.lidi.find((l) => l.id === selectedId);
+          const errEl = document.getElementById('err-mgr-pin');
+
+          if (!lido || lido.pin !== pin) {
+            errEl.classList.add('visible');
+            return;
+          }
+
+          errEl.classList.remove('visible');
+          mgrPinInput.value = '';
+          state.managerId = lido.id;
+          renderManagerDashboard();
+          showToast('Accesso al Control Center effettuato.');
+        });
+
+        document.getElementById('mgr-logout-btn').addEventListener('click', () => {
+          state.managerId = null;
+          renderManagerDashboard();
+        });
+
+        ['available', 'limited', 'full'].forEach((statusVal) => {
+          document.getElementById('btn-status-' + statusVal).addEventListener('click', async () => {
+            const lido = state.lidi.find((l) => l.id === state.managerId);
+            if (!lido) return;
+            lido.status = statusVal;
+            lido.updatedAt = nowTimeLabel();
+            renderAll();
+            const res = await pushCloudLidi();
+            showToast(res.synced ? 'Stato aggiornato sul cloud.' : 'Stato aggiornato in tempo reale.');
+          });
+        });
+
+        document.querySelectorAll('.promo-chip').forEach((chip) => {
+          chip.addEventListener('click', () => {
+            document.getElementById('mgr-promo-input').value = chip.dataset.preset;
+          });
+        });
+
+        document.getElementById('mgr-save-promo-btn').addEventListener('click', async () => {
+          const lido = state.lidi.find((l) => l.id === state.managerId);
+          if (!lido) return;
+          lido.promo = document.getElementById('mgr-promo-input').value.trim();
+          lido.updatedAt = nowTimeLabel();
+          renderAll();
+          await pushCloudLidi();
+          showToast('Evento / avviso pubblicato.');
+        });
+
+        document.getElementById('mgr-clear-promo-btn').addEventListener('click', async () => {
+          const lido = state.lidi.find((l) => l.id === state.managerId);
+          if (!lido) return;
+          lido.promo = '';
+          lido.updatedAt = nowTimeLabel();
+          document.getElementById('mgr-promo-input').value = '';
+          renderAll();
+          await pushCloudLidi();
+          showToast('Avviso rimosso.');
+        });
+
+        document.getElementById('mgr-download-qr').addEventListener('click', () => {
+          const lido = state.lidi.find((l) => l.id === state.managerId);
+          if (lido) QR.downloadPosterPng(lido, getLidoShareUrl(lido.id));
+        });
+
+        document.getElementById('mgr-print-qr').addEventListener('click', () => {
+          window.print();
+        });
+
+        /* ---- ADMIN CLOUD CONFIG ---- */
+        document.getElementById('admin-save-cloud-btn').addEventListener('click', async () => {
+          state.cloud.binId = document.getElementById('admin-bin-id').value.trim();
+          state.cloud.masterKey = document.getElementById('admin-master-key').value.trim();
+          localStorage.setItem(STORAGE_KEYS.CLOUD, JSON.stringify(state.cloud));
+          renderAdminPanel();
+          if (state.cloud.binId) {
+            const ok = await fetchCloudLidi(true);
+            if (!ok && state.cloud.masterKey) {
+              await pushCloudLidi();
+            }
+          } else {
+            setCloudStatusUI('local', 'Archivio Locale · Demo');
+            showToast('Configurazione salvata.');
+          }
+        });
+
+        document.getElementById('admin-create-bin-btn').addEventListener('click', async () => {
+          const key = document.getElementById('admin-master-key').value.trim();
+          if (!key) {
+            showToast('Inserisci prima la chiave X-Master-Key.');
+            return;
+          }
+          try {
+            const res = await fetch('https://api.jsonbin.io/v3/b', {
+              method: 'POST',
+              headers: {
+                'Content-Type': 'application/json',
+                'X-Master-Key': key,
+                'X-Bin-Name': 'LidoPass-Costa-Adriatica',
+                'X-Bin-Private': 'false'
+              },
+              body: JSON.stringify({ lidi: state.lidi })
+            });
+            if (!res.ok) throw new Error('HTTP ' + res.status);
+            const data = await res.json();
+            const newId = data && data.metadata && data.metadata.id;
+            if (!newId) throw new Error('Bin ID non ricevuto');
+            state.cloud.binId = newId;
+            state.cloud.masterKey = key;
+            localStorage.setItem(STORAGE_KEYS.CLOUD, JSON.stringify(state.cloud));
+            renderAdminPanel();
+            setCloudStatusUI('cloud', 'Cloud JSONBin Live');
+            showToast('Nuovo Bin Cloud creato e sincronizzato.');
+          } catch {
+            showToast('Errore creazione Bin: verifica la X-Master-Key.');
+          }
+        });
+
+        document.getElementById('admin-clear-cloud-btn').addEventListener('click', () => {
+          state.cloud = { binId: '', masterKey: '' };
+          localStorage.removeItem(STORAGE_KEYS.CLOUD);
+          renderAdminPanel();
+          setCloudStatusUI('local', 'Archivio Locale · Demo');
+          showToast('Sincronizzazione cloud disattivata.');
+        });
+
+        /* ---- TAB 4: PROFILO & GDPR ---- */
+        document.getElementById('profile-form').addEventListener('submit', (e) => {
+          e.preventDefault();
+          state.profile = {
+            name: document.getElementById('prof-name').value.trim(),
+            city: document.getElementById('prof-city').value.trim(),
+            email: document.getElementById('prof-email').value.trim()
+          };
+          localStorage.setItem(STORAGE_KEYS.PROFILE, JSON.stringify(state.profile));
+          renderProfile();
+          showToast('Preferenze salvate sul dispositivo.');
+        });
+
+        document.getElementById('gdpr-wipe-btn').addEventListener('click', () => {
+          localStorage.removeItem(STORAGE_KEYS.PROFILE);
+          localStorage.removeItem(STORAGE_KEYS.FAVS);
+          localStorage.removeItem(STORAGE_KEYS.LIDI);
+          localStorage.removeItem(STORAGE_KEYS.CLOUD);
+          state.favorites = [];
+          state.profile = { name: '', city: '', email: '' };
+          state.cloud = { binId: '', masterKey: '' };
+          state.managerId = null;
+          state.lidi = structuredClone(DEMO_LIDI);
+          setCloudStatusUI('local', 'Archivio Locale · Demo');
+          renderAll();
+          showToast('Tutti i dati locali sono stati eliminati.');
+        });
+
+        /* ---- PWA INSTALL MODAL ---- */
+        const modal = document.getElementById('install-modal');
+        const openInstallModal = () => modal.classList.add('open');
+        const closeInstallModal = () => modal.classList.remove('open');
+
+        document.getElementById('header-install-btn').addEventListener('click', openInstallModal);
+        document.getElementById('profile-open-install-btn').addEventListener('click', openInstallModal);
+        document.getElementById('install-modal-close').addEventListener('click', closeInstallModal);
+        document.getElementById('install-modal-done').addEventListener('click', closeInstallModal);
+        modal.addEventListener('click', (e) => {
+          if (e.target === modal) closeInstallModal();
+        });
+
+        document.getElementById('trigger-native-install').addEventListener('click', async () => {
+          if (!state.deferredPrompt) return;
+          await state.deferredPrompt.prompt();
+          const choice = await state.deferredPrompt.userChoice;
+          if (choice && choice.outcome === 'accepted') {
+            state.deferredPrompt = null;
+            document.getElementById('android-native-install-wrap').style.display = 'none';
+            closeInstallModal();
+            showToast('LidoPass installata sul dispositivo.');
+          }
+        });
+
+        window.addEventListener('beforeinstallprompt', (e) => {
+          e.preventDefault();
+          state.deferredPrompt = e;
+          document.getElementById('android-native-install-wrap').style.display = 'block';
+        });
+
+        window.addEventListener('appinstalled', () => {
+          state.isStandalone = true;
+          document.getElementById('header-install-btn').style.display = 'none';
+          closeInstallModal();
+        });
+
+        const updateOnlineBanner = () => {
+          document.getElementById('offline-strip').classList.toggle('visible', !navigator.onLine);
+        };
+        window.addEventListener('online', () => {
+          updateOnlineBanner();
+          fetchCloudLidi(false);
+        });
+        window.addEventListener('offline', updateOnlineBanner);
+        updateOnlineBanner();
+      }
+
+      /* ===========================================================
+         8. INIT
+         =========================================================== */
+      function init() {
+        initPWAMetadata();
+        loadLocalState();
+
+        state.isStandalone =
+          window.matchMedia('(display-mode: standalone)').matches ||
+          window.navigator.standalone === true;
+
+        if (state.isStandalone) {
+          document.getElementById('header-install-btn').style.display = 'none';
+        }
+
+        const params = new URLSearchParams(window.location.search);
+        const lidoParam = params.get('lido');
+        if (lidoParam) state.spotlightId = lidoParam;
+
+        setupEvents();
+        renderAll();
+
+        if (state.cloud.binId && navigator.onLine) {
+          fetchCloudLidi(false);
+        } else {
+          setCloudStatusUI('local', 'Archivio Locale · Demo');
+        }
+      }
+
+      init();
+    })();
+  </script>
+</body>
+</html>
